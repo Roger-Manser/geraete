@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.13)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.14)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.13</title>
+    <title>Geräteliste v1.0.14</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231B5E3F' width='192' height='192'/><text x='50%' y='50%' font-size='120' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>⚙</text></svg>">
     <style>
@@ -625,7 +625,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.13)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.14)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1025,9 +1025,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-    <!-- PDF Komprimierungs-Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         // Fallback wenn jsdelivr auch nicht funktioniert
         if (typeof jsQR === 'undefined') {
@@ -1038,7 +1035,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.13';
+        const APP_VERSION = '1.0.14';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1727,75 +1724,6 @@
 
         // File Management
         // PDF Komprimierung
-        async function compressPdf(file) {
-            try {
-                console.log(`📄 Versuche PDF zu komprimieren: ${file.name}`);
-                
-                // PDF mit pdfjs laden
-                const arrayBuffer = await file.arrayBuffer();
-                const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                
-                // Neue PDF mit jsPDF erstellen
-                const { jsPDF } = window.jspdf;
-                const newPdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4',
-                    compress: true // Kompression aktivieren
-                });
-
-                const pageWidth = newPdf.internal.pageSize.getWidth();
-                const pageHeight = newPdf.internal.pageSize.getHeight();
-                const maxPages = Math.min(pdfDoc.numPages, 30); // Max 30 Seiten (von 50)
-
-                // Jede Seite rendern mit niedriger Auflösung
-                for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
-                    const page = await pdfDoc.getPage(pageNum);
-                    const viewport = page.getViewport({ scale: 1.2 }); // Noch niedriger (von 1.5)
-                    
-                    const canvas = document.createElement('canvas');
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    
-                    const ctx = canvas.getContext('2d');
-                    await page.render({
-                        canvasContext: ctx,
-                        viewport: viewport
-                    }).promise;
-
-                    // Canvas zu JPEG mit noch niedriger Qualität
-                    const imgData = canvas.toDataURL('image/jpeg', 0.4); // 40% Qualität (von 60%)
-                    
-                    const imgWidth = pageWidth - 5;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    
-                    if (pageNum > 1) newPdf.addPage();
-                    newPdf.addImage(imgData, 'JPEG', 2.5, 2.5, imgWidth, imgHeight, null, 'FAST');
-                }
-
-                // Komprimierte PDF als Datei generieren
-                const compressedPdfData = newPdf.output('arraybuffer');
-                const compressedFile = new File(
-                    [compressedPdfData],
-                    file.name,
-                    { type: 'application/pdf' }
-                );
-
-                const originalSizeMB = (file.size / 1024 / 1024).toFixed(1);
-                const compressedSizeMB = (compressedFile.size / 1024 / 1024).toFixed(1);
-                const reduction = (((file.size - compressedFile.size) / file.size) * 100).toFixed(0);
-
-                console.log(`✅ PDF komprimiert: ${originalSizeMB}MB → ${compressedSizeMB}MB (${reduction}% Reduktion)`);
-                showToast(`✅ PDF komprimiert: ${originalSizeMB}MB → ${compressedSizeMB}MB (${reduction}% kleiner)`, 'success');
-                
-                return compressedFile;
-            } catch (err) {
-                console.error('PDF Komprimierung fehlgeschlagen:', err);
-                showToast(`⚠️ PDF-Komprimierung fehlgeschlagen, nutze Original`, 'warning');
-                return file;
-            }
-        }
-
         function handleFileSelect(e) {
             const files = e.target.files;
             if (!files.length) return;
@@ -1812,22 +1740,14 @@
 
             // Jede Datei verarbeiten
             Array.from(files).forEach(async (file, index) => {
-                let fileToUpload = file;
-
-                // Wenn PDF und > 300KB, versuche zu komprimieren
-                if (file.type === 'application/pdf' && file.size > 300 * 1024) {
-                    console.log(`📄 PDF ist ${(file.size/1024/1024).toFixed(1)}MB, komprimiere...`);
-                    fileToUpload = await compressPdf(file);
-                }
-
                 // Größe prüfen
-                if (fileToUpload.size > MAX_SINGLE_FILE) {
-                    showToast(`⚠️ ${fileToUpload.name}: ${(fileToUpload.size/1024/1024).toFixed(1)}MB ist zu gross (max 5MB)`, 'warning');
+                if (file.size > MAX_SINGLE_FILE) {
+                    showToast(`⚠️ ${file.name}: ${(file.size/1024/1024).toFixed(1)}MB ist zu gross (max 5MB)`, 'warning');
                     return;
                 }
 
                 // Gesamtgröße prüfen
-                const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + fileToUpload.size;
+                const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + file.size;
                 if (totalSize > MAX_TOTAL) {
                     showToast(`⚠️ Zu viele/grosse Dateien. Max 50MB total.`, 'warning');
                     return;
@@ -1835,16 +1755,16 @@
 
                 // Zu GitHub hochladen
                 const deviceId = app.currentDevice.id || `device-${Date.now()}`;
-                showToast(`⏳ Lade hoch: ${fileToUpload.name}...`, 'info');
+                showToast(`⏳ Lade hoch: ${file.name}...`, 'info');
 
-                const uploadResult = await uploadFileToGitHub(fileToUpload, deviceId);
+                const uploadResult = await uploadFileToGitHub(file, deviceId);
                 if (uploadResult) {
                     // Nur Metadaten speichern, KEINE Base64!
                     const fileObj = {
                         id: Date.now().toString() + index,
-                        name: fileToUpload.name,
-                        type: fileToUpload.type || 'application/octet-stream',
-                        size: fileToUpload.size,
+                        name: file.name,
+                        type: file.type || 'application/octet-stream',
+                        size: file.size,
                         githubPath: uploadResult.githubPath,
                         synced: uploadResult.synced,
                         hochgeladen: new Date().toISOString()
@@ -1852,7 +1772,7 @@
 
                     app.currentDevice.dateien.push(fileObj);
                     renderFilesList(app.currentDevice.dateien);
-                    showToast(`✅ ${fileToUpload.name} hochgeladen! (${(fileToUpload.size/1024).toFixed(0)}KB)`, 'success');
+                    showToast(`✅ ${file.name} hochgeladen! (${(file.size/1024).toFixed(0)}KB)`, 'success');
                     console.log(`📎 Datei zu GitHub: ${uploadResult.githubPath}`);
                 }
             });
@@ -1991,23 +1911,33 @@
 
         function removeFile(fileId) {
             if (!app.currentDevice || !app.currentDevice.dateien) return;
-            const index = app.currentDevice.dateien.findIndex(f => f.id === fileId);
-            if (index > -1) {
-                const file = app.currentDevice.dateien[index];
-                
-                // Datei von GitHub löschen
-                if (file.githubPath && file.synced) {
-                    deleteFileFromGitHub(file.githubPath).then(success => {
-                        if (success) {
-                            console.log(`🗑️ Datei von GitHub gelöscht: ${file.name}`);
-                        }
-                    });
-                }
-                
-                app.currentDevice.dateien.splice(index, 1);
-                renderFilesList(app.currentDevice.dateien);
-                showToast(`🗑️ ${file.name} gelöscht`, 'success');
+            const fileIndex = app.currentDevice.dateien.findIndex(f => f.id === fileId);
+            if (fileIndex === -1) return;
+            
+            const file = app.currentDevice.dateien[fileIndex];
+            
+            // Bestätigungsdialog
+            const confirmed = confirm(`🗑️ Datei wirklich löschen?\n\n"${file.name}"\n\nDiese Aktion kann nicht rückgängig gemacht werden!`);
+            
+            if (!confirmed) {
+                console.log(`❌ Datei-Löschung abgebrochen: ${file.name}`);
+                return;
             }
+            
+            // Datei von GitHub löschen
+            if (file.githubPath && file.synced) {
+                deleteFileFromGitHub(file.githubPath).then(success => {
+                    if (success) {
+                        console.log(`🗑️ Datei von GitHub gelöscht: ${file.name}`);
+                        showToast(`✅ ${file.name} gelöscht!`, 'success');
+                    } else {
+                        showToast(`⚠️ Datei von GitHub konnte nicht gelöscht werden`, 'warning');
+                    }
+                });
+            }
+            
+            app.currentDevice.dateien.splice(fileIndex, 1);
+            renderFilesList(app.currentDevice.dateien);
         }
 
         function downloadFile(fileId) {
