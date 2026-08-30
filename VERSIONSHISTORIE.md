@@ -1,0 +1,124 @@
+# Versionshistorie — Geräteliste PWA
+
+## [1.0.0] — 30.08.2026
+
+### ✨ Features
+- ✅ Geräte-CRUD (Name, Hersteller, Modell, Seriennummer, Kaufdatum, Garantiebis, Standort, Notizen)
+- ✅ Live-Suchmaske (Filter alle Felder: Name, Hersteller, Modell, Seriennummer)
+- ✅ QR/Barcode-Scanner (jsQR, Kamerazugriff, Fallback-Abfrage)
+- ✅ Foto-Upload + Claude Vision API (Automatische Datenextraktion)
+- ✅ Dateimanagement (PDFs, Bilder speichern in /data/dateien/)
+- ✅ GitHub Sync (Contents API, Fine-grained PAT)
+- ✅ PWA Installation (Handy + Desktop)
+- ✅ Offline-Support (Service Worker, localStorage)
+- ✅ Dark Green Theme, Swiss German UI
+- ✅ Garantie-Status-Warnung (aktiv/auslaufend/abgelaufen)
+
+### 🏗️ Technologie
+- Single-File HTML (45 KB)
+- Vanilla JavaScript (keine Dependencies außer jsQR)
+- Service Worker mit Cache-First Strategie
+- GitHub API für Sync
+- Anthropic Claude Vision API für Photo-Analyse
+
+### 📦 Delivery
+- geraete-app.zip (18 KB)
+- GitHub Pages ready
+- Installation: roger-manser.github.io/geraete/
+
+---
+
+## Roadmap (Phase 2+)
+
+### [1.1.0] — Geplant
+- [ ] QR-Code Generator (pro Gerät)
+- [ ] Wartungs-Log (Wartungsdatum, Notizen)
+- [ ] Export zu PDF (Gerätebericht)
+- [ ] Bildergalerie (Grid-View)
+
+### [1.2.0] — Geplant
+- [ ] Kosten-Tracking (Kaufpreis, Reparaturen)
+- [ ] Volltextsuche mit Indexierung
+- [ ] Mehrsprachig (DE/EN/FR)
+- [ ] Dark/Light Mode Toggle
+
+### [2.0.0] — Geplant
+- [ ] Cloud Backup (Optional: Dropbox/iCloud)
+- [ ] Multi-Device Sync
+- [ ] Shared Lists (Familie/Mitbewohner)
+- [ ] Mobile App Native Wrapper (React Native)
+
+---
+
+## Versionierungs-Schema
+
+**MAJOR.MINOR.PATCH**
+
+- **MAJOR** (x.0.0): Breaking Changes, komplett neue Features
+- **MINOR** (1.x.0): Neue Features, abwärtskompatibel
+- **PATCH** (1.0.x): Bug Fixes, kleine Verbesserungen
+
+Beispiele:
+- Bug Fix → 1.0.0 → 1.0.1
+- Feature → 1.0.1 → 1.1.0
+- Breaking Change → 1.1.0 → 2.0.0
+
+---
+
+## Deployment Checklist
+
+Bei jeder neuen Version:
+
+- [ ] Version in `index.html` aktualisieren (im Header, Footer, Modal-About)
+- [ ] Version in `manifest.json` aktualisieren
+- [ ] CACHE_NAME in `sw.js` aktualisieren
+- [ ] VERSIONSHISTORIE.md mit neuem Eintrag
+- [ ] README.md aktualisieren (falls nötig)
+- [ ] Git Commit: `Version 1.0.1 - Bug Fix`
+- [ ] Git Tag: `v1.0.1`
+- [ ] ZIP neu erstellen
+- [ ] GitHub Release erstellen
+
+---
+
+## Update-Prozess für Benutzer
+
+**Automatisch** (Service Worker):
+1. Neue Version wird automatisch heruntergeladen (updateViaCache: 'none')
+2. Service Worker aktualisiert Cache (CACHE_NAME)
+3. User wird benachrichtigt (optional Toast)
+4. Nächstes Laden → neue Version aktiv
+
+**Manuell**:
+- Browser-Cache leeren (Ctrl+Shift+Delete)
+- App-Reload (F5 oder Pull-to-Refresh)
+
+---
+
+## Verknüpfungen zu anderen Apps
+
+Ähnliche Versionierung bei:
+- **Haushaltbuch** (v2.x.x)
+- **Fahrtenbuch** (v1.x.x)
+- **Rezeptbuch** (v3.x.x)
+- **Todo App** (v1.x.x)
+- **Lebenskosten** (v1.x.x)
+- **OPL-Database** (v1.x.x)
+- **Terramar Handbuch** (v1.x.x)
+
+Alle nutzen gleiches Schema: MAJOR.MINOR.PATCH + VERSIONSHISTORIE.md
+
+---
+
+## Notizen
+
+- Versionsgeschichte hilft bei Bug-Tracking ("In welcher Version passierte das?")
+- Service Worker CACHE_NAME wichtig für User-Caching
+- GitHub Releases für Release Notes + Download
+- Semantic Versioning nach semver.org
+
+---
+
+**Aktuelle Version**: 1.0.0  
+**Letztes Update**: 30.08.2026 12:48 UTC  
+**Nächstes Check**: [Offen]
