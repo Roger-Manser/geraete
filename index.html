@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.12)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.13)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.12</title>
+    <title>Geräteliste v1.0.13</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231B5E3F' width='192' height='192'/><text x='50%' y='50%' font-size='120' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>⚙</text></svg>">
     <style>
@@ -625,7 +625,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.12)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.13)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1038,7 +1038,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.12';
+        const APP_VERSION = '1.0.13';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1807,54 +1807,57 @@
                 app.currentDevice.dateien = [];
             }
 
-            const MAX_FILE_SIZE = 300 * 1024; // 300KB max pro Datei (von 1MB)
-            const MAX_TOTAL_SIZE = 2 * 1024 * 1024; // 2MB total (von 5MB)
+            const MAX_SINGLE_FILE = 5 * 1024 * 1024; // 5MB pro Datei
+            const MAX_TOTAL = 50 * 1024 * 1024; // 50MB total pro Gerät
 
             // Jede Datei verarbeiten
             Array.from(files).forEach(async (file, index) => {
-                let fileToProcess = file;
+                let fileToUpload = file;
 
                 // Wenn PDF und > 300KB, versuche zu komprimieren
                 if (file.type === 'application/pdf' && file.size > 300 * 1024) {
-                    console.log(`📄 PDF ist ${(file.size/1024/1024).toFixed(1)}MB, starte Komprimierung...`);
-                    fileToProcess = await compressPdf(file);
+                    console.log(`📄 PDF ist ${(file.size/1024/1024).toFixed(1)}MB, komprimiere...`);
+                    fileToUpload = await compressPdf(file);
                 }
 
                 // Größe prüfen
-                if (fileToProcess.size > MAX_FILE_SIZE) {
-                    showToast(`⚠️ ${fileToProcess.name}: ${(fileToProcess.size/1024).toFixed(0)}KB ist zu gross (max 300KB)`, 'warning');
-                    console.warn(`📎 Datei zu gross: ${fileToProcess.name}`);
+                if (fileToUpload.size > MAX_SINGLE_FILE) {
+                    showToast(`⚠️ ${fileToUpload.name}: ${(fileToUpload.size/1024/1024).toFixed(1)}MB ist zu gross (max 5MB)`, 'warning');
                     return;
                 }
 
                 // Gesamtgröße prüfen
-                const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + fileToProcess.size;
-                if (totalSize > MAX_TOTAL_SIZE) {
-                    showToast(`⚠️ Zu viele/grosse Dateien. Max 2MB total.`, 'warning');
-                    console.warn('📎 Gesamtgröße überschritten');
+                const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + fileToUpload.size;
+                if (totalSize > MAX_TOTAL) {
+                    showToast(`⚠️ Zu viele/grosse Dateien. Max 50MB total.`, 'warning');
                     return;
                 }
 
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const base64 = event.target.result;
+                // Zu GitHub hochladen
+                const deviceId = app.currentDevice.id || `device-${Date.now()}`;
+                showToast(`⏳ Lade hoch: ${fileToUpload.name}...`, 'info');
+
+                const uploadResult = await uploadFileToGitHub(fileToUpload, deviceId);
+                if (uploadResult) {
+                    // Nur Metadaten speichern, KEINE Base64!
                     const fileObj = {
                         id: Date.now().toString() + index,
-                        name: fileToProcess.name,
-                        type: fileToProcess.type || 'application/octet-stream',
-                        size: fileToProcess.size,
-                        base64: base64,
+                        name: fileToUpload.name,
+                        type: fileToUpload.type || 'application/octet-stream',
+                        size: fileToUpload.size,
+                        githubPath: uploadResult.githubPath,
+                        synced: uploadResult.synced,
                         hochgeladen: new Date().toISOString()
                     };
-                    
+
                     app.currentDevice.dateien.push(fileObj);
                     renderFilesList(app.currentDevice.dateien);
-                    console.log(`📎 Datei hinzugefügt: ${fileToProcess.name} (${(fileToProcess.size/1024).toFixed(1)}KB)`);
-                };
-                reader.readAsDataURL(fileToProcess);
+                    showToast(`✅ ${fileToUpload.name} hochgeladen! (${(fileToUpload.size/1024).toFixed(0)}KB)`, 'success');
+                    console.log(`📎 Datei zu GitHub: ${uploadResult.githubPath}`);
+                }
             });
 
-            showToast(`${files.length} Datei(en) werden hinzugefügt...`, 'success');
+            showToast(`${files.length} Datei(en) werden hochgeladen...`, 'info');
         }
 
         function renderFilesList(files) {
@@ -1869,37 +1872,161 @@
                     <div class="file-info">
                         <div class="file-name">${file.name}</div>
                         <div class="file-type">${file.type} • ${formatFileSize(file.size)}</div>
+                        <div class="file-status" style="font-size: 0.75rem; color: var(--text-muted);">
+                            ${file.synced ? '✅ Synced' : '⏳ Pending'}
+                        </div>
                     </div>
                     <div class="file-actions">
-                        <button class="btn-small btn-secondary" onclick="downloadFile('${file.id}')">⬇️</button>
+                        ${file.synced ? `<button class="btn-small btn-secondary" onclick="downloadFile('${file.id}')">⬇️</button>` : ''}
                         <button class="btn-small btn-danger" onclick="removeFile('${file.id}')">🗑️</button>
                     </div>
                 </div>
             `).join('');
         }
 
+        // Upload Datei zu GitHub
+        async function uploadFileToGitHub(file, deviceId) {
+            try {
+                if (!app.githubConfig.token || !app.githubConfig.repo || !app.githubConfig.user) {
+                    showToast('❌ GitHub Verbindung nicht konfiguriert', 'error');
+                    return null;
+                }
+
+                const fileName = file.name.replace(/[^a-z0-9.-]/gi, '_');
+                const filePath = `data/geraete/${deviceId}/${fileName}`;
+                const url = `https://api.github.com/repos/${app.githubConfig.user}/${app.githubConfig.repo}/contents/${filePath}`;
+
+                // Datei zu Base64 für Upload
+                const base64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(file);
+                });
+
+                // Prüfe ob Datei schon existiert (um SHA zu bekommen)
+                let sha = null;
+                try {
+                    const getResponse = await fetch(url, {
+                        headers: { 'Authorization': `token ${app.githubConfig.token}` }
+                    });
+                    if (getResponse.ok) {
+                        const data = await getResponse.json();
+                        sha = data.sha;
+                    }
+                } catch (e) {
+                    // Datei existiert noch nicht
+                }
+
+                // Datei hochladen
+                const uploadResponse = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${app.githubConfig.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `📎 Datei hochgeladen: ${fileName}`,
+                        content: base64,
+                        sha: sha
+                    })
+                });
+
+                if (!uploadResponse.ok) {
+                    const error = await uploadResponse.json();
+                    throw new Error(error.message || 'Upload fehlgeschlagen');
+                }
+
+                console.log(`✅ Datei zu GitHub hochgeladen: ${filePath}`);
+                return {
+                    githubPath: filePath,
+                    synced: true
+                };
+            } catch (err) {
+                console.error('GitHub Upload fehler:', err);
+                showToast(`❌ Datei-Upload fehler: ${err.message}`, 'error');
+                return null;
+            }
+        }
+
+        // Lösche Datei von GitHub
+        async function deleteFileFromGitHub(filePath) {
+            try {
+                if (!app.githubConfig.token) return false;
+
+                const url = `https://api.github.com/repos/${app.githubConfig.user}/${app.githubConfig.repo}/contents/${filePath}`;
+
+                // Hole SHA der Datei
+                const getResponse = await fetch(url, {
+                    headers: { 'Authorization': `token ${app.githubConfig.token}` }
+                });
+
+                if (!getResponse.ok) return false;
+
+                const data = await getResponse.json();
+                const sha = data.sha;
+
+                // Lösche Datei
+                const deleteResponse = await fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `token ${app.githubConfig.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `🗑️ Datei gelöscht: ${filePath}`,
+                        sha: sha
+                    })
+                });
+
+                if (deleteResponse.ok) {
+                    console.log(`✅ Datei von GitHub gelöscht: ${filePath}`);
+                    return true;
+                }
+                return false;
+            } catch (err) {
+                console.error('GitHub Delete fehler:', err);
+                return false;
+            }
+        }
+
         function removeFile(fileId) {
             if (!app.currentDevice || !app.currentDevice.dateien) return;
             const index = app.currentDevice.dateien.findIndex(f => f.id === fileId);
             if (index > -1) {
-                const fileName = app.currentDevice.dateien[index].name;
+                const file = app.currentDevice.dateien[index];
+                
+                // Datei von GitHub löschen
+                if (file.githubPath && file.synced) {
+                    deleteFileFromGitHub(file.githubPath).then(success => {
+                        if (success) {
+                            console.log(`🗑️ Datei von GitHub gelöscht: ${file.name}`);
+                        }
+                    });
+                }
+                
                 app.currentDevice.dateien.splice(index, 1);
                 renderFilesList(app.currentDevice.dateien);
-                console.log(`🗑️ Datei gelöscht: ${fileName}`);
+                showToast(`🗑️ ${file.name} gelöscht`, 'success');
             }
         }
 
         function downloadFile(fileId) {
             if (!app.currentDevice || !app.currentDevice.dateien) return;
             const file = app.currentDevice.dateien.find(f => f.id === fileId);
-            if (file && file.base64) {
+            if (file && file.githubPath) {
+                // Konstruiere GitHub Raw Content URL
+                const rawUrl = `https://raw.githubusercontent.com/${app.githubConfig.user}/${app.githubConfig.repo}/main/${file.githubPath}`;
+                
+                // Download auslösen
                 const a = document.createElement('a');
-                a.href = file.base64;
+                a.href = rawUrl;
                 a.download = file.name;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+                
                 console.log(`⬇️ Datei heruntergeladen: ${file.name}`);
+                showToast(`⬇️ ${file.name} wird heruntergeladen...`, 'info');
             }
         }
 
