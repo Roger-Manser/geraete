@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.15)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.16)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.15</title>
+    <title>Geräteliste v1.0.16</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231B5E3F' width='192' height='192'/><text x='50%' y='50%' font-size='120' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>⚙</text></svg>">
     <style>
@@ -625,7 +625,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.15)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.16)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1035,7 +1035,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.15';
+        const APP_VERSION = '1.0.16';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1724,8 +1724,10 @@
 
         // File Management
         // PDF Komprimierung
-        function handleFileSelect(e) {
+        async function handleFileSelect(e) {
             const files = e.target.files;
+            console.log(`📎 handleFileSelect aufgerufen mit ${files.length} Datei(en)`);
+            
             if (!files.length) return;
 
             if (!app.currentDevice) {
@@ -1738,50 +1740,55 @@
             const MAX_SINGLE_FILE = 5 * 1024 * 1024; // 5MB pro Datei
             const MAX_TOTAL = 50 * 1024 * 1024; // 50MB total pro Gerät
 
-            // Jede Datei verarbeiten (mit for-Schleife, nicht forEach!)
-            (async () => {
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
+            // Jede Datei verarbeiten
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                console.log(`📎 Verarbeite Datei ${i+1}/${files.length}: ${file.name} (${(file.size/1024).toFixed(0)}KB)`);
 
-                    // Größe prüfen
-                    if (file.size > MAX_SINGLE_FILE) {
-                        showToast(`⚠️ ${file.name}: ${(file.size/1024/1024).toFixed(1)}MB ist zu gross (max 5MB)`, 'warning');
-                        continue;
-                    }
-
-                    // Gesamtgröße prüfen
-                    const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + file.size;
-                    if (totalSize > MAX_TOTAL) {
-                        showToast(`⚠️ Zu viele/grosse Dateien. Max 50MB total.`, 'warning');
-                        continue;
-                    }
-
-                    // Zu GitHub hochladen
-                    const deviceId = app.currentDevice.id || `device-${Date.now()}`;
-                    showToast(`⏳ Lade hoch: ${file.name}...`, 'info');
-
-                    const uploadResult = await uploadFileToGitHub(file, deviceId);
-                    if (uploadResult) {
-                        // Nur Metadaten speichern, KEINE Base64!
-                        const fileObj = {
-                            id: Date.now().toString() + i,
-                            name: file.name,
-                            type: file.type || 'application/octet-stream',
-                            size: file.size,
-                            githubPath: uploadResult.githubPath,
-                            synced: uploadResult.synced,
-                            hochgeladen: new Date().toISOString()
-                        };
-
-                        app.currentDevice.dateien.push(fileObj);
-                        renderFilesList(app.currentDevice.dateien);
-                        showToast(`✅ ${file.name} hochgeladen! (${(file.size/1024).toFixed(0)}KB)`, 'success');
-                        console.log(`📎 Datei zu GitHub: ${uploadResult.githubPath}`);
-                    }
+                // Größe prüfen
+                if (file.size > MAX_SINGLE_FILE) {
+                    showToast(`⚠️ ${file.name}: ${(file.size/1024/1024).toFixed(1)}MB ist zu gross (max 5MB)`, 'warning');
+                    console.warn(`❌ Datei zu gross: ${file.name}`);
+                    continue;
                 }
-            })();
 
-            showToast(`${files.length} Datei(en) werden hochgeladen...`, 'info');
+                // Gesamtgröße prüfen
+                const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + file.size;
+                if (totalSize > MAX_TOTAL) {
+                    showToast(`⚠️ Zu viele/grosse Dateien. Max 50MB total.`, 'warning');
+                    console.warn('❌ Gesamtgröße überschritten');
+                    continue;
+                }
+
+                // Zu GitHub hochladen
+                const deviceId = app.currentDevice.id || `device-${Date.now()}`;
+                showToast(`⏳ Lade hoch: ${file.name}...`, 'info');
+                console.log(`📤 Starte Upload zu GitHub: ${file.name}`);
+
+                const uploadResult = await uploadFileToGitHub(file, deviceId);
+                console.log(`Upload Result:`, uploadResult);
+                
+                if (uploadResult) {
+                    // Nur Metadaten speichern
+                    const fileObj = {
+                        id: Date.now().toString() + i,
+                        name: file.name,
+                        type: file.type || 'application/octet-stream',
+                        size: file.size,
+                        githubPath: uploadResult.githubPath,
+                        synced: uploadResult.synced,
+                        hochgeladen: new Date().toISOString()
+                    };
+
+                    app.currentDevice.dateien.push(fileObj);
+                    console.log(`✅ Datei zu Device hinzugefügt: ${file.name}`);
+                    renderFilesList(app.currentDevice.dateien);
+                    showToast(`✅ ${file.name} hochgeladen! (${(file.size/1024).toFixed(0)}KB)`, 'success');
+                    console.log(`📎 Datei zu GitHub: ${uploadResult.githubPath}`);
+                } else {
+                    console.error(`❌ Upload fehlgeschlagen für: ${file.name}`);
+                }
+            }
         }
 
         function renderFilesList(files) {
