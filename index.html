@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.5)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.6)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.5</title>
+    <title>Geräteliste v1.0.6</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231B5E3F' width='192' height='192'/><text x='50%' y='50%' font-size='120' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>⚙</text></svg>">
     <style>
@@ -625,7 +625,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.5)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.6)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1019,7 +1019,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.5';
+        const APP_VERSION = '1.0.6';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1080,7 +1080,7 @@
 
         // Event Listeners
         function setupEventListeners() {
-            document.getElementById('btn-add-device').onclick = openDeviceModal;
+            document.getElementById('btn-add-device').onclick = () => openDeviceModal(null);
             document.getElementById('btn-scan').onclick = openScannerModal;
             document.getElementById('btn-sync').onclick = syncWithGitHub;
             document.getElementById('version-clickable').onclick = openVersionModal;
