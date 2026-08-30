@@ -1,6 +1,6 @@
-// Version: 1.0.0 (30.08.2026)
+// Version: 1.0.4 (30.08.2026)
 // Update CACHE_NAME mit jeder neuen Version
-const CACHE_NAME = 'geraete-v1.0.2';
+const CACHE_NAME = 'geraete-v1.0.4';
 const ASSETS = [
   '/geraete/',
   '/geraete/index.html',
@@ -58,6 +58,12 @@ self.addEventListener('fetch', (event) => {
       });
     })
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'UPDATE_IMMEDIATELY') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('sync', (event) => {
