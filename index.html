@@ -540,6 +540,23 @@
             }
         }
 
+        .settings-tab {
+            transition: color 0.2s;
+        }
+
+        .settings-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .settings-tab-content {
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .devices-grid {
                 grid-template-columns: 1fr;
@@ -599,7 +616,10 @@
         <header>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h1>⚙️ Geräteliste <span style="font-size: 0.8rem; opacity: 0.8;">(v1.0.0)</span></h1>
-                <button class="btn-secondary" id="btn-info" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">ℹ️ Info</button>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-secondary" id="btn-info" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">ℹ️ Info</button>
+                    <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
+                </div>
             </div>
             <div class="header-row">
                 <div class="search-box">
@@ -764,6 +784,114 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close" id="settings-close">✕</button>
+            <h2 class="modal-title">Einstellungen</h2>
+
+            <!-- Tabs -->
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                <button class="settings-tab active" data-tab="connection" style="background: none; border: none; color: var(--text-primary); padding: 0.5rem 1rem; cursor: pointer; border-bottom: 2px solid var(--primary-light);">🔌 Datenverbindung</button>
+                <button class="settings-tab" data-tab="app" style="background: none; border: none; color: var(--text-secondary); padding: 0.5rem 1rem; cursor: pointer;">📱 App</button>
+            </div>
+
+            <!-- Datenverbindung Tab -->
+            <div id="tab-connection" class="settings-tab-content">
+                <h3 style="color: var(--primary-lighter); margin-bottom: 1rem;">GitHub Datenverbindung</h3>
+
+                <div style="background: rgba(61, 147, 102, 0.1); border: 1px solid var(--primary-light); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                    <p style="margin: 0 0 0.5rem; color: var(--text-primary); font-weight: 500;">📊 Verbindungsstatus</p>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div id="connection-indicator" style="width: 12px; height: 12px; border-radius: 50%; background: #999;"></div>
+                        <span id="connection-status" style="color: var(--text-secondary);">Nicht konfiguriert</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>GitHub Benutzer</label>
+                    <input type="text" id="settings-github-user" placeholder="z.B. roger-manser">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0;">Dein GitHub Username (case-sensitive)</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Repository Name</label>
+                    <input type="text" id="settings-github-repo" placeholder="z.B. geraete">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0;">Name des Repositories (klein)</p>
+                </div>
+
+                <div class="form-group">
+                    <label>GitHub Token (Fine-grained PAT)</label>
+                    <input type="password" id="settings-github-token" placeholder="ghp_...">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0;">
+                        <a href="https://github.com/settings/tokens?type=beta" style="color: var(--primary-light); text-decoration: none;" target="_blank">Token erstellen ↗</a>
+                        (Contents: read & write)
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>Claude API Key (Optional)</label>
+                    <input type="password" id="settings-claude-key" placeholder="sk-...">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0;">
+                        <a href="https://console.anthropic.com/keys" style="color: var(--primary-light); text-decoration: none;" target="_blank">Key erstellen ↗</a>
+                        (Nur für Photo-Analyse erforderlich)
+                    </p>
+                </div>
+
+                <div style="background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); border-radius: 8px; padding: 1rem; margin: 1.5rem 0;">
+                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">
+                        ⚠️ <strong>Hinweis:</strong> Diese Daten werden lokal im Browser gespeichert. Teile deinen Token nicht mit anderen!
+                    </p>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button class="btn-primary" id="btn-test-connection" style="flex: 1;">🔗 Verbindung testen</button>
+                    <button class="btn-secondary" id="btn-save-settings" style="flex: 1;">Speichern</button>
+                    <button class="btn-danger" id="btn-clear-settings" style="flex: 1;">Zurücksetzen</button>
+                </div>
+
+                <div id="test-result" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 8px; font-size: 0.9rem;"></div>
+            </div>
+
+            <!-- App Tab -->
+            <div id="tab-app" class="settings-tab-content" style="display: none;">
+                <h3 style="color: var(--primary-lighter); margin-bottom: 1rem;">App-Einstellungen</h3>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; margin-bottom: 1rem;">
+                        <input type="checkbox" id="setting-auto-sync" style="width: 18px; height: 18px; cursor: pointer;">
+                        Auto-Sync aktivieren
+                    </label>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Automatisch mit GitHub synchronisieren nach Änderungen</p>
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; margin-bottom: 1rem;">
+                        <input type="checkbox" id="setting-notifications" style="width: 18px; height: 18px; cursor: pointer;" checked>
+                        Benachrichtigungen
+                    </label>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Toast-Benachrichtigungen anzeigen</p>
+                </div>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Daten-Verwaltung</h4>
+                    <button class="btn-danger" id="btn-export-data" style="width: 100%; margin-bottom: 0.5rem;">⬇️ Daten exportieren (JSON)</button>
+                    <button class="btn-secondary" id="btn-clear-cache" style="width: 100%;">🗑️ Cache leeren</button>
+                </div>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                        <strong>Version:</strong> 1.0.0<br>
+                        <strong>Build:</strong> 30.08.2026<br>
+                        <strong>Lizenz:</strong> MIT
+                    </p>
+                </div>
+            </div>
+
+            <button class="btn-primary" id="btn-close-settings" style="width: 100%; margin-top: 2rem;">Schliessen</button>
+        </div>
+    </div>
+
     <!-- Info Modal -->
     <div class="modal" id="info-modal">
         <div class="modal-content" style="max-width: 500px;">
@@ -811,7 +939,7 @@
         <p id="loading-text">Laden...</p>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js" onerror="console.warn('jsQR CDN failed, scanner may not work')"></script>
     <script>
         // App Version
         const APP_VERSION = '1.0.0';
@@ -879,6 +1007,9 @@
             document.getElementById('btn-info').onclick = openInfoModal;
             document.getElementById('info-close').onclick = closeInfoModal;
             document.getElementById('btn-close-info').onclick = closeInfoModal;
+            document.getElementById('btn-settings').onclick = openSettingsModal;
+            document.getElementById('settings-close').onclick = closeSettingsModal;
+            document.getElementById('btn-close-settings').onclick = closeSettingsModal;
             document.getElementById('modal-close').onclick = closeDeviceModal;
             document.getElementById('scanner-close').onclick = closeScannerModal;
             document.getElementById('btn-cancel').onclick = closeDeviceModal;
@@ -888,6 +1019,31 @@
             document.getElementById('search-clear').onclick = clearSearch;
             document.getElementById('btn-add-file').onclick = () => document.getElementById('file-input').click();
             document.getElementById('file-input').onchange = handleFileSelect;
+
+            // Settings Tabs
+            document.querySelectorAll('.settings-tab').forEach(tab => {
+                tab.onclick = (e) => {
+                    const tabName = e.target.dataset.tab;
+                    document.querySelectorAll('.settings-tab').forEach(t => {
+                        t.classList.remove('active');
+                        t.style.color = 'var(--text-secondary)';
+                        t.style.borderBottom = 'none';
+                    });
+                    document.querySelectorAll('.settings-tab-content').forEach(c => c.style.display = 'none');
+                    
+                    e.target.classList.add('active');
+                    e.target.style.color = 'var(--text-primary)';
+                    e.target.style.borderBottom = '2px solid var(--primary-light)';
+                    document.getElementById('tab-' + tabName).style.display = 'block';
+                };
+            });
+
+            // Settings Buttons
+            document.getElementById('btn-test-connection').onclick = testGitHubConnection;
+            document.getElementById('btn-save-settings').onclick = saveSettingsModal;
+            document.getElementById('btn-clear-settings').onclick = clearSettingsModal;
+            document.getElementById('btn-export-data').onclick = exportData;
+            document.getElementById('btn-clear-cache').onclick = clearCache;
 
             // Photo upload
             const photoArea = document.getElementById('photo-upload-area');
@@ -949,8 +1105,194 @@
             document.getElementById('info-modal').classList.add('active');
         }
 
+        function openInfoModal() {
+            document.getElementById('info-modal').classList.add('active');
+        }
+
         function closeInfoModal() {
             document.getElementById('info-modal').classList.remove('active');
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settings-modal').classList.add('active');
+            
+            // Lade aktuelle Werte
+            document.getElementById('settings-github-user').value = app.githubConfig.user || '';
+            document.getElementById('settings-github-repo').value = app.githubConfig.repo || '';
+            document.getElementById('settings-github-token').value = app.githubConfig.token ? '●●●●●●●●●●●●' : '';
+            document.getElementById('settings-claude-key').value = app.githubConfig.claudeKey ? '●●●●●●●●●●●●' : '';
+            
+            updateConnectionStatus();
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('active');
+        }
+
+        function updateConnectionStatus() {
+            const indicator = document.getElementById('connection-indicator');
+            const statusText = document.getElementById('connection-status');
+            
+            if (app.githubConfig.user && app.githubConfig.repo && app.githubConfig.token) {
+                indicator.style.background = '#4CAF50';
+                statusText.textContent = `✅ Verbunden als ${app.githubConfig.user}/${app.githubConfig.repo}`;
+                statusText.style.color = '#4CAF50';
+            } else {
+                indicator.style.background = '#999';
+                statusText.textContent = '❌ Nicht konfiguriert';
+                statusText.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        async function testGitHubConnection() {
+            const user = document.getElementById('settings-github-user').value.trim();
+            const repo = document.getElementById('settings-github-repo').value.trim();
+            const token = document.getElementById('settings-github-token').value;
+            
+            if (!user || !repo || token === '' || token.includes('●')) {
+                showToast('Bitte alle Felder ausfüllen', 'warning');
+                return;
+            }
+
+            const resultBox = document.getElementById('test-result');
+            resultBox.style.display = 'none';
+
+            showLoading('Teste Verbindung...');
+
+            try {
+                const response = await fetch(
+                    `https://api.github.com/repos/${user}/${repo}/contents/data/geraete.json`,
+                    {
+                        headers: {
+                            'Authorization': `token ${token}`
+                        }
+                    }
+                );
+
+                hideLoading();
+
+                if (response.ok) {
+                    resultBox.style.background = 'rgba(76, 175, 80, 0.1)';
+                    resultBox.style.borderColor = 'rgba(76, 175, 80, 0.3)';
+                    resultBox.style.color = '#4CAF50';
+                    resultBox.textContent = '✅ Verbindung erfolgreich! Repository ist erreichbar.';
+                    resultBox.style.display = 'block';
+                    showToast('Verbindung erfolgreich!', 'success');
+                } else if (response.status === 404) {
+                    resultBox.style.background = 'rgba(244, 67, 54, 0.1)';
+                    resultBox.style.borderColor = 'rgba(244, 67, 54, 0.3)';
+                    resultBox.style.color = '#F44336';
+                    resultBox.textContent = '❌ Repository oder Datei nicht gefunden. Prüfe Username, Repo-Name und ob data/geraete.json existiert.';
+                    resultBox.style.display = 'block';
+                } else if (response.status === 401) {
+                    resultBox.style.background = 'rgba(244, 67, 54, 0.1)';
+                    resultBox.style.borderColor = 'rgba(244, 67, 54, 0.3)';
+                    resultBox.style.color = '#F44336';
+                    resultBox.textContent = '❌ Token ist ungültig oder abgelaufen. Erstelle einen neuen Token.';
+                    resultBox.style.display = 'block';
+                } else {
+                    resultBox.style.background = 'rgba(255, 152, 0, 0.1)';
+                    resultBox.style.borderColor = 'rgba(255, 152, 0, 0.3)';
+                    resultBox.style.color = '#FF9800';
+                    resultBox.textContent = `⚠️ Fehler ${response.status}: ${response.statusText}`;
+                    resultBox.style.display = 'block';
+                }
+            } catch (err) {
+                hideLoading();
+                resultBox.style.background = 'rgba(244, 67, 54, 0.1)';
+                resultBox.style.borderColor = 'rgba(244, 67, 54, 0.3)';
+                resultBox.style.color = '#F44336';
+                resultBox.textContent = '❌ Verbindungsfehler: ' + err.message;
+                resultBox.style.display = 'block';
+            }
+        }
+
+        function saveSettingsModal() {
+            const user = document.getElementById('settings-github-user').value.trim();
+            const repo = document.getElementById('settings-github-repo').value.trim();
+            const token = document.getElementById('settings-github-token').value;
+            const claudeKey = document.getElementById('settings-claude-key').value;
+
+            if (!user || !repo || !token) {
+                showToast('Bitte Benutzer, Repository und Token ausfüllen', 'error');
+                return;
+            }
+
+            if (token === '●●●●●●●●●●●●') {
+                showToast('Token nicht geändert', 'info');
+                return;
+            }
+
+            app.githubConfig.user = user;
+            app.githubConfig.repo = repo;
+            app.githubConfig.token = token;
+            if (claudeKey && claudeKey !== '●●●●●●●●●●●●') {
+                app.githubConfig.claudeKey = claudeKey;
+                localStorage.setItem('claude_api_key', claudeKey);
+            }
+
+            localStorage.setItem('github_user', user);
+            localStorage.setItem('github_repo', repo);
+            localStorage.setItem('github_token', token);
+
+            updateConnectionStatus();
+            showToast('Einstellungen gespeichert', 'success');
+        }
+
+        function clearSettingsModal() {
+            if (!confirm('Alle Einstellungen wirklich zurücksetzen?')) return;
+
+            app.githubConfig = {
+                user: '',
+                repo: '',
+                token: '',
+                claudeKey: ''
+            };
+
+            localStorage.removeItem('github_user');
+            localStorage.removeItem('github_repo');
+            localStorage.removeItem('github_token');
+            localStorage.removeItem('claude_api_key');
+
+            document.getElementById('settings-github-user').value = '';
+            document.getElementById('settings-github-repo').value = '';
+            document.getElementById('settings-github-token').value = '';
+            document.getElementById('settings-claude-key').value = '';
+
+            updateConnectionStatus();
+            showToast('Einstellungen zurückgesetzt', 'success');
+        }
+
+        function exportData() {
+            const data = {
+                version: APP_VERSION,
+                exportDate: new Date().toISOString(),
+                geraete: app.devices
+            };
+
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `geraete-export-${new Date().getTime()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showToast('Daten exportiert', 'success');
+        }
+
+        function clearCache() {
+            if (!confirm('Cache wirklich leeren? Die App wird danach neu geladen.')) return;
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    registrations.forEach(reg => reg.unregister());
+                });
+            }
+
+            localStorage.clear();
+            location.reload();
         }
 
         function saveDevice() {
