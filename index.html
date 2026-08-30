@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.7)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.8)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.7</title>
+    <title>Geräteliste v1.0.8</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231B5E3F' width='192' height='192'/><text x='50%' y='50%' font-size='120' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>⚙</text></svg>">
     <style>
@@ -625,7 +625,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.7)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.8)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1035,7 +1035,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.7';
+        const APP_VERSION = '1.0.8';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1411,15 +1411,53 @@
         function handleDeviceImageSelect(file) {
             if (!file) return;
 
+            // Bild laden und komprimieren
             const reader = new FileReader();
             reader.onload = (e) => {
-                const base64 = e.target.result;
-                if (!app.currentDevice) {
-                    app.currentDevice = {};
-                }
-                app.currentDevice.hauptbild = base64;
-                displayDeviceImage(base64);
-                console.log('📸 Gerätebild gespeichert');
+                const img = new Image();
+                img.onload = () => {
+                    // Bild auf max 800x800px komprimieren
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > height) {
+                        if (width > 800) {
+                            height = Math.round((height * 800) / width);
+                            width = 800;
+                        }
+                    } else {
+                        if (height > 800) {
+                            width = Math.round((width * 800) / height);
+                            height = 800;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Zu JPEG mit niedriger Qualität komprimieren
+                    const base64 = canvas.toDataURL('image/jpeg', 0.6); // 0.6 = 60% Qualität
+                    
+                    // Größe prüfen
+                    const sizeKB = (base64.length / 1024).toFixed(1);
+                    if (base64.length > 200000) { // 200KB max
+                        showToast(`⚠️ Bild zu gross (${sizeKB}KB, max 200KB). Wurde komprimiert.`, 'warning');
+                    }
+                    
+                    if (!app.currentDevice) {
+                        app.currentDevice = {};
+                    }
+                    app.currentDevice.hauptbild = base64;
+                    displayDeviceImage(base64);
+                    console.log(`📸 Gerätebild gespeichert (${sizeKB}KB, ${width}x${height}px)`);
+                };
+                img.onerror = () => {
+                    showToast('❌ Bild konnte nicht geladen werden', 'error');
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
