@@ -58,7 +58,20 @@
           "hochgeladen": "2026-08-31T11:39:58.084Z"
         }
       ]
+    },
+    {
+      "id": "1788176519525",
+      "erstelltAm": "2026-08-31T11:41:59.525Z",
+      "name": "Kühlschrank",
+      "hersteller": "",
+      "modell": "",
+      "seriennummer": "",
+      "kaufdatum": "",
+      "garantiebis": "",
+      "standort": "",
+      "notizen": "",
+      "aktualisierAm": "2026-08-31T11:41:59.525Z"
     }
   ],
-  "lastSync": "2026-08-31T11:41:44.429Z"
+  "lastSync": "2026-08-31T11:41:59.770Z"
 }
