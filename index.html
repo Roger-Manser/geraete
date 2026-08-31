@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.21)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.22)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.21</title>
+    <title>Geräteliste v1.0.22</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -652,7 +652,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.21)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.22)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1062,7 +1062,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.21';
+        const APP_VERSION = '1.0.22';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1198,15 +1198,24 @@
         function openDeviceModal(device = null) {
             // WICHTIG: Explizit setzen ob neu oder edit
             if (device === undefined || device === null) {
-                app.currentDevice = null;
+                // NEU: Temporäres Gerät mit ID erstellen (nicht null!)
+                app.currentDevice = {
+                    id: Date.now().toString(),
+                    erstelltAm: new Date().toISOString(),
+                    isNew: true,  // Flag: noch nicht gespeichert
+                    dateien: [],
+                    name: ''
+                };
             } else {
-                app.currentDevice = device;
+                app.currentDevice = { ...device };  // Kopie, nicht Referenz!
+                app.currentDevice.isNew = false;
             }
             
-            document.getElementById('modal-title').textContent = app.currentDevice ? 'Gerät bearbeiten' : 'Neues Gerät';
-            document.getElementById('btn-delete').style.display = app.currentDevice ? 'block' : 'none';
+            document.getElementById('modal-title').textContent = app.currentDevice.isNew ? 'Neues Gerät' : 'Gerät bearbeiten';
+            document.getElementById('btn-delete').style.display = app.currentDevice.isNew ? 'none' : 'block';
 
-            if (app.currentDevice) {
+            if (!app.currentDevice.isNew) {
+                // Nur ausfüllen wenn bestehendes Gerät
                 document.getElementById('form-name').value = app.currentDevice.name || '';
                 document.getElementById('form-hersteller').value = app.currentDevice.hersteller || '';
                 document.getElementById('form-modell').value = app.currentDevice.modell || '';
@@ -1218,6 +1227,7 @@
                 renderFilesList(app.currentDevice.dateien || []);
                 displayDeviceImage(app.currentDevice.hauptbild || null);
             } else {
+                // Leer für neues Gerät
                 document.getElementById('form-name').value = '';
                 document.getElementById('form-hersteller').value = '';
                 document.getElementById('form-modell').value = '';
@@ -1520,36 +1530,29 @@
                 return;
             }
 
-            // Neues oder bestehendes Gerät
-            let device;
-            const isNew = !app.currentDevice;
-            
-            if (isNew) {
-                device = {
-                    id: Date.now().toString(),
-                    erstelltAm: new Date().toISOString()
-                };
-            } else {
-                device = app.currentDevice;
+            if (!app.currentDevice) {
+                showToast('Fehler: Kein Gerät ausgewählt', 'error');
+                return;
             }
 
-            // Felder setzen
-            device.name = name;
-            device.hersteller = hersteller;
-            device.modell = modell;
-            device.seriennummer = document.getElementById('form-seriennummer').value.trim();
-            device.kaufdatum = document.getElementById('form-kaufdatum').value;
-            device.garantiebis = document.getElementById('form-garantiebis').value;
-            device.standort = document.getElementById('form-standort').value.trim();
-            device.notizen = document.getElementById('form-notizen').value.trim();
-            device.aktualisierAm = new Date().toISOString();
+            // Geräte-Daten aktualisieren (ID bleibt gleich!)
+            app.currentDevice.name = name;
+            app.currentDevice.hersteller = hersteller;
+            app.currentDevice.modell = modell;
+            app.currentDevice.seriennummer = document.getElementById('form-seriennummer').value.trim();
+            app.currentDevice.kaufdatum = document.getElementById('form-kaufdatum').value;
+            app.currentDevice.garantiebis = document.getElementById('form-garantiebis').value;
+            app.currentDevice.standort = document.getElementById('form-standort').value.trim();
+            app.currentDevice.notizen = document.getElementById('form-notizen').value.trim();
+            app.currentDevice.aktualisierAm = new Date().toISOString();
 
-            // Nur hinzufügen wenn neu
-            if (isNew) {
-                app.devices.push(device);
-                console.log('✅ Neues Gerät hinzugefügt:', device.name, '| Gesamt:', app.devices.length);
+            // Nur zu Array hinzufügen wenn neu
+            if (app.currentDevice.isNew) {
+                app.devices.push(app.currentDevice);
+                app.currentDevice.isNew = false;  // Nicht mehr neu!
+                console.log('✅ Neues Gerät gespeichert:', app.currentDevice.name, '| ID:', app.currentDevice.id);
             } else {
-                console.log('✏️ Gerät aktualisiert:', device.name);
+                console.log('✏️ Gerät aktualisiert:', app.currentDevice.name);
             }
 
             // WICHTIG: Modal ZUERST schliessen
