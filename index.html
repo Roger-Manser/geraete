@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.26)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.27)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.26</title>
+    <title>Geräteliste v1.0.27</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -317,16 +317,16 @@
 
         /* Spezial-Styling für Datumpicker */
         .form-group input[type="date"] {
-            background: #2D5A3D !important;
+            background: rgba(255,180,180,0.1) !important;  /* Zartes Rosa */
             color: var(--text-primary) !important;
             cursor: pointer;
-            border: 1px solid #3D7A4D !important;
+            border: 1px solid var(--border-color) !important;
         }
 
         /* Das Kalender-Icon auf schwarz setzen */
         .form-group input[type="date"]::-webkit-calendar-picker-indicator {
-            background: #2D5A3D !important;
-            filter: invert(1) brightness(1.2);  /* Icon schwarz machen */
+            background: rgba(255,180,180,0.1) !important;
+            filter: invert(1) brightness(0.1);  /* Icon schwarz */
             cursor: pointer;
             border-radius: 4px;
             padding: 4px;
@@ -334,7 +334,7 @@
         }
 
         .form-group input[type="date"]:focus {
-            background: #3D7A4D !important;
+            background: rgba(255,180,180,0.15) !important;
             border-color: var(--primary-light) !important;
         }
 
@@ -665,7 +665,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.26)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.27)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1075,7 +1075,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.26';
+        const APP_VERSION = '1.0.27';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -2163,9 +2163,8 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    // UTF-8 sichere Dekodierung (nicht atob!)
-                    const bytes = Uint8Array.from(atob(data.content), c => c.charCodeAt(0));
-                    const decodedString = new TextDecoder('utf-8').decode(bytes);
+                    // UTF-8 sichere Dekodierung mit decodeURIComponent
+                    const decodedString = decodeURIComponent(escape(atob(data.content)));
                     const content = JSON.parse(decodedString);
                     output.textContent = `✅ Sync erfolgreich!
 
@@ -2221,12 +2220,10 @@ SHA: ${data.sha}`;
                     lastSync: new Date().toISOString()
                 };
 
-                // Korrekte Base64-Encoding mit UTF-8 (sicherer!)
+                // Korrekte Base64-Encoding mit UTF-8 (bewährte Methode!)
                 const jsonString = JSON.stringify(data, null, 2);
-                const bytes = new TextEncoder().encode(jsonString);
-                // Sichere Konvertierung statt apply() - funktioniert mit vielen Umlauten!
-                const binary = Array.from(bytes).map(b => String.fromCharCode(b)).join('');
-                const content = btoa(binary);
+                // encodeURIComponent + btoa ist die sichere Methode für UTF-8
+                const content = btoa(unescape(encodeURIComponent(jsonString)));
 
                 // Schritt 3: Upload-Body erstellen
                 const uploadBody = {
@@ -2283,9 +2280,8 @@ SHA: ${data.sha}`;
 
                 if (response.ok) {
                     const data = await response.json();
-                    // UTF-8 sichere Dekodierung (nicht atob!)
-                    const bytes = Uint8Array.from(atob(data.content), c => c.charCodeAt(0));
-                    const decodedString = new TextDecoder('utf-8').decode(bytes);
+                    // UTF-8 sichere Dekodierung mit decodeURIComponent
+                    const decodedString = decodeURIComponent(escape(atob(data.content)));
                     const content = JSON.parse(decodedString);
                     app.devices = content.geraete || [];
                     renderDevices();
