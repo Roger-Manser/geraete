@@ -24,7 +24,20 @@
           "hochgeladen": "2026-08-30T15:31:37.478Z"
         }
       ]
+    },
+    {
+      "id": "1788176277115",
+      "erstelltAm": "2026-08-31T11:37:57.115Z",
+      "name": "Geschirrspüler",
+      "hersteller": "",
+      "modell": "",
+      "seriennummer": "",
+      "kaufdatum": "",
+      "garantiebis": "",
+      "standort": "",
+      "notizen": "",
+      "aktualisierAm": "2026-08-31T11:37:57.115Z"
     }
   ],
-  "lastSync": "2026-08-31T11:37:28.436Z"
+  "lastSync": "2026-08-31T11:37:57.322Z"
 }
