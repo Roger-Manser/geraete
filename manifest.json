@@ -2,7 +2,7 @@
   "name": "Geräteliste - Geräte Verwaltung",
   "short_name": "Geräteliste",
   "description": "Verwaltung von Haushaltsgeräten und Elektrowerkzeugen mit Fotos, PDFs und Metadaten v1.0.2",
-  "version": "1.0.24",
+  "version": "1.0.26",
   "build_date": "2026-08-30",
   "start_url": "/geraete/",
   "display": "standalone",
