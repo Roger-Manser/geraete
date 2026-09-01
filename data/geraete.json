@@ -41,19 +41,19 @@
       "dateien": [
         {
           "id": "17881763869470",
-          "name": "Elektrolux GeschirrspÜühler Schnellstart.pdf",
+          "name": "Elektrolux Geschirrspüler Schnellstart.pdf",
           "type": "application/pdf",
           "size": 1065060,
-          "githubPath": "data/geraete/1788176277115/Elektrolux_Geschirrsp_hler_Schnellstart.pdf",
+          "githubPath": "data/geraete/1788176277115/Elektrolux_Geschirrspüler_Schnellstart.pdf",
           "synced": true,
           "hochgeladen": "2026-08-31T11:39:46.947Z"
         },
         {
           "id": "17881763980840",
-          "name": "Elektrolux GeschirrspÜühler Manual.pdf",
+          "name": "Elektrolux Geschirrspüler Manual.pdf",
           "type": "application/pdf",
           "size": 203070,
-          "githubPath": "data/geraete/1788176277115/Elektrolux_Geschirrsp_hler_Manual.pdf",
+          "githubPath": "data/geraete/1788176277115/Elektrolux_Geschirrspüler_Manual.pdf",
           "synced": true,
           "hochgeladen": "2026-08-31T11:39:58.084Z"
         }
@@ -78,7 +78,7 @@
           "name": "Elektrolux Kühlschrank Montage.pdf",
           "type": "application/pdf",
           "size": 1251701,
-          "githubPath": "data/geraete/1788176519525/Elektrolux_K_hlschrank_Montage.pdf",
+          "githubPath": "data/geraete/1788176519525/Elektrolux_Kühlschrank_Montage.pdf",
           "synced": true,
           "hochgeladen": "2026-08-31T11:43:12.221Z"
         },
@@ -87,7 +87,7 @@
           "name": "Elektrolux Kühlschrank Handbuch.pdf",
           "type": "application/pdf",
           "size": 474587,
-          "githubPath": "data/geraete/1788176519525/Elektrolux_K_hlschrank_Handbuch.pdf",
+          "githubPath": "data/geraete/1788176519525/Elektrolux_Kühlschrank_Handbuch.pdf",
           "synced": true,
           "hochgeladen": "2026-08-31T11:43:19.192Z"
         }
