@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.41)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.42)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.41</title>
+    <title>Geräteliste v1.0.42</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -665,7 +665,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.41)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.42)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1075,7 +1075,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.41';
+        const APP_VERSION = '1.0.42';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -2288,13 +2288,49 @@ SHA: ${data.sha}`;
                 if (response.ok) {
                     const data = await response.json();
                     // EINFACHE, bewährte UTF-8 Dekodierung
-                    const decodedString = decodeURIComponent(escape(atob(data.content)));
+                    let decodedString = decodeURIComponent(escape(atob(data.content)));
+                    
+                    console.log('📊 VOR Reparatur (erste 200 chars):');
+                    console.log(decodedString.substring(0, 200));
+                    
+                    // 🔧 REPARATUR AM RAW STRING - VOR JSON.parse()!
+                    // Das ist sicherer als einzelne Feld-Reparaturen!
+                    decodedString = decodedString
+                        // Lookup-Table direkt im String
+                        .replace(/Küfüche/g, 'Küche')
+                        .replace(/Geschirrsrü\/rühler/g, 'Geschirrspüler')
+                        .replace(/GeschirrsrÜ rühler/g, 'Geschirrspüler')
+                        .replace(/GeschirrsrÜ/g, 'Geschirrspüler')
+                        .replace(/KÜfche/g, 'Küche')
+                        .replace(/Küüche/g, 'Küche')
+                        .replace(/KÜfüche/g, 'Küche')
+                        .replace(/KÜhlschrank/g, 'Kühlschrank')
+                        .replace(/SpÜlmaschine/g, 'Spülmaschine')
+                        .replace(/MÜller/g, 'Müller')
+                        // UTF-8 Fehler
+                        .replace(/Ã¤/g, 'ä').replace(/Ã„/g, 'Ä')
+                        .replace(/Ã¶/g, 'ö').replace(/Ã–/g, 'Ö')
+                        .replace(/Ã¼/g, 'ü').replace(/Ã/g, 'Ü')
+                        .replace(/Ã¢/g, 'â').replace(/Ã©/g, 'é')
+                        .replace(/Ã Â¼/g, 'ü')
+                        .replace(/Ã Â¤/g, 'ä')
+                        .replace(/Ã Â¶/g, 'ö')
+                        .replace(/ÃÂ¼/g, 'ü')
+                        .replace(/ÃÂ¤/g, 'ä')
+                        .replace(/ÃÂ¶/g, 'ö')
+                        .replace(/Â¼/g, 'ü')
+                        .replace(/Â¤/g, 'ä')
+                        .replace(/Â¶/g, 'ö');
+                    
+                    console.log('✅ NACH Reparatur (erste 200 chars):');
+                    console.log(decodedString.substring(0, 200));
+                    
                     const content = JSON.parse(decodedString);
                     app.devices = content.geraete || [];
                     
-                    console.log('📊 GELADEN VON GITHUB - VOR REPARATUR:');
+                    console.log('📊 GERÄTE NACH REPARATUR:');
                     app.devices.forEach((d, i) => {
-                        console.log(`  Gerät ${i}: name="${d.name}" | standort="${d.standort}"`);
+                        console.log(`  ${i}: name="${d.name}" | standort="${d.standort}"`);
                         if (d.dateien) {
                             d.dateien.forEach(f => {
                                 console.log(`    - Datei: "${f.name}"`);
@@ -2302,96 +2338,7 @@ SHA: ${data.sha}`;
                         }
                     });
                     
-                    // 🔧 REPARATUR: Falsch kodierte Umlaute fixen!
-                    app.devices.forEach(device => {
-                        // Häufige Fehler: Ã¼→ü, Ã¶→ö, Ã¤→ä, Ã„→Ä, etc.
-                        const fixEncoding = (str) => {
-                            if (!str) return str;
-                            
-                            // ⚡ LOOKUP TABLE für bekannte beschädigte Wörter
-                            const replacements = {
-                                // Geräte-Namen die falsch sind
-                                'GeschirrsrÜ': 'Geschirrspüler',
-                                'GeschirrsrÜ rühler': 'Geschirrspüler',
-                                'Geschirrsrü/rühler': 'Geschirrspüler',  // Mit Slash!
-                                'KÜfüche': 'Küche',
-                                'KÜfche': 'Küche',
-                                'Küfüche': 'Küche',  // Neues Pattern!
-                                'Küüche': 'Küche',  // Doppel-ü!
-                                'SpÜlmaschine': 'Spülmaschine',
-                                'KÜhlschrank': 'Kühlschrank',
-                                'MÜller': 'Müller',
-                                'Tücher': 'Tücher',
-                                'Ü': 'ü',  // Großes Ü in der Mitte → ü
-                                // Datei-Namen Varianten (mit "rühler" oder Slash)
-                                'GeschirrsrÜ rühler Schnellstart': 'Geschirrspüler Schnellstart',
-                                'GeschirrsrÜ rühler Manual': 'Geschirrspüler Manual',
-                                'Geschirrsrü/rühler Schnellstart': 'Geschirrspüler Schnellstart',
-                                'Geschirrsrü/rühler Manual': 'Geschirrspüler Manual',
-                            };
-                            
-                            // Ersetze alle bekannten schlechten Muster
-                            let result = str;
-                            let changed = false;
-                            for (const [bad, good] of Object.entries(replacements)) {
-                                if (result.includes(bad)) {
-                                    console.log(`🔧 Ersetze: "${bad}" → "${good}" in "${str}"`);
-                                    result = result.replace(new RegExp(bad, 'g'), good);
-                                    changed = true;
-                                }
-                            }
-                            
-                            if (changed) {
-                                console.log(`✅ Nach Lookup: "${result}"`);
-                            } else {
-                                console.log(`⚪ Keine Lookup-Treffer für: "${str}"`);
-                            }
-                            
-                            return result
-                                // Falls Lookup nicht funktioniert, Fallback zu Regex
-                                .replace(/Ã¤/g, 'ä').replace(/Ã„/g, 'Ä')
-                                .replace(/Ã¶/g, 'ö').replace(/Ã–/g, 'Ö')
-                                .replace(/Ã¼/g, 'ü').replace(/Ã/g, 'Ü')
-                                .replace(/Ã¢/g, 'â').replace(/Ã©/g, 'é')
-                                .replace(/Ã Â¼/g, 'ü')
-                                .replace(/Ã Â¤/g, 'ä')
-                                .replace(/Ã Â¶/g, 'ö')
-                                .replace(/ÃÂ¼/g, 'ü')
-                                .replace(/ÃÂ¤/g, 'ä')
-                                .replace(/ÃÂ¶/g, 'ö')
-                                .replace(/Â¼/g, 'ü')
-                                .replace(/Â¤/g, 'ä')
-                                .replace(/Â¶/g, 'ö')
-                                .replace(/([a-zA-Z])Â¼([a-zA-Z])/g, '$1ü$2')
-                                .replace(/([a-zA-Z])Â¤([a-zA-Z])/g, '$1ä$2')
-                                .replace(/([a-zA-Z])Â¶([a-zA-Z])/g, '$1ö$2')
-                                .replace(/([a-z])Ü([a-z])/g, '$1ü$2')
-                                .replace(/([a-z])Ä([a-z])/g, '$1ä$2')
-                                .replace(/([a-z])Ö([a-z])/g, '$1ö$2')
-                                .replace(/Üf/g, 'ü')
-                                .replace(/Ü /g, 'ü')
-                                .replace(/Äl/g, 'ä')
-                                .replace(/Ä /g, 'ä')
-                                .replace(/Üü/g, 'ü')
-                                .replace(/Ää/g, 'ä')
-                                .replace(/Öö/g, 'ö');
-                        };
-                        device.name = fixEncoding(device.name);
-                        device.hersteller = fixEncoding(device.hersteller);
-                        device.modell = fixEncoding(device.modell);
-                        device.seriennummer = fixEncoding(device.seriennummer);
-                        device.standort = fixEncoding(device.standort);
-                        device.notizen = fixEncoding(device.notizen);
-                        
-                        // 🔧 Auch Datei-Namen reparieren!
-                        if (device.dateien && Array.isArray(device.dateien)) {
-                            device.dateien.forEach(file => {
-                                if (file.name) {
-                                    file.name = fixEncoding(file.name);
-                                }
-                            });
-                        }
-                    });
+                    renderDevices();
                     
                     console.log('📊 NACH REPARATUR:');
                     app.devices.forEach((d, i) => {
