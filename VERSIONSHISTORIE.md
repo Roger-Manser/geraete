@@ -26,6 +26,24 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.2] — 01.09.2026 (PATCH)
+
+### 🐛 Ultra-Fix: "roger-manser" Blitzkrieg
+- 🔧 `onfocus="this.value = ''"` — Input-Value sofort beim Fokus löschen
+- 🔧 handleSearch Filter — "roger-manser" komplett blockieren wenn es kommt
+- 🔧 Mehrfaches Layering: onfocus + Filter + localStorage Clear + sessionStorage Clear
+- 🔧 Browser-Autofill mit JavaScript besiegt! 💪
+
+---
+
+## [1.1.1] — 01.09.2026 (PATCH)
+
+### 🐛 Bug Fixes
+- 🔧 Versionshistorie Modal aktualisiert (v1.1.0 als aktuelle Version)
+- 🔧 Roadmap aktualisiert (v1.1.0 released, v1.2.0+ geplant)
+- 🔧 Ultra-aggressives "roger-manser" Clearing (sessionStorage + mehrfaches value-Clear)
+- 🔧 Modal zeigt jetzt richtige Version & Release Notes
+
 ---
 
 ## [1.1.0] — 01.09.2026
@@ -152,6 +170,6 @@ Alle nutzen gleiches Schema: MAJOR.MINOR.PATCH + VERSIONSHISTORIE.md
 
 ---
 
-**Aktuelle Version**: 1.1.0  
-**Letztes Update**: 01.09.2026 09:10 UTC  
+**Aktuelle Version**: 1.1.2  
+**Letztes Update**: 01.09.2026 09:20 UTC  
 **Nächstes Check**: [Offen]
