@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.52)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.0.53)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.0.52</title>
+    <title>Geräteliste v1.0.53</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.52)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.0.53)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1092,7 +1092,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.0.52';
+        const APP_VERSION = '1.0.53';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1111,6 +1111,12 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            // 🔧 AGGRESSIV: localStorage für search clearen
+            localStorage.removeItem('searchQuery');
+            localStorage.removeItem('search_query');
+            localStorage.removeItem('search-input');
+            localStorage.removeItem('app_searchQuery');
+            
             // 🔧 AGGRESSIV: Search-Input komplett clearen
             setTimeout(() => {
                 const searchInput = document.getElementById('search-input');
@@ -1122,7 +1128,7 @@
                     searchInput.removeAttribute('value');
                     if (searchInput.form) searchInput.form.reset();
                 }
-            }, 100);
+            }, 50);
             
             if (!app.githubConfig.user || !app.githubConfig.token) {
                 showGitHubSetup();
@@ -1166,8 +1172,9 @@
 
         // Event Listeners
         function setupEventListeners() {
-            // 🔧 Stelle sicher dass search-input leer ist
+            // 🔧 AGGRESSIV: Search-Input und localStorage clearen
             document.getElementById('search-input').value = '';
+            localStorage.removeItem('searchQuery');
             
             document.getElementById('btn-add-device').onclick = () => openDeviceModal(null);
             document.getElementById('btn-scan').onclick = openScannerModal;
