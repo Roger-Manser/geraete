@@ -26,6 +26,17 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.3] — 01.09.2026 (PATCH)
+
+### 🔴 Browser-Autofill Nuklear-Option
+- 🔧 Input ID: `search-input` → `device-search` (Browser-Autofill umgehen)
+- 🔧 Input Type: `text` → `search` (bessere Semantik)
+- 🔧 data-lpignore="true" + data-form-type="other" (Password Manager ignorieren)
+- 🔧 onchange Handler — Leert Wert sofort wenn Browser Autofill versucht
+- 🔧 onfocus + onchange Double-Layer Defense
+
+---
+
 ## [1.1.2] — 01.09.2026 (PATCH)
 
 ### 🐛 Ultra-Fix: "roger-manser" Blitzkrieg
@@ -170,6 +181,6 @@ Alle nutzen gleiches Schema: MAJOR.MINOR.PATCH + VERSIONSHISTORIE.md
 
 ---
 
-**Aktuelle Version**: 1.1.2  
-**Letztes Update**: 01.09.2026 09:20 UTC  
+**Aktuelle Version**: 1.1.3  
+**Letztes Update**: 01.09.2026 09:43 UTC  
 **Nächstes Check**: [Offen]
