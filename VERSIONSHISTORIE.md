@@ -28,15 +28,48 @@
 
 ---
 
+## [1.1.0] — 01.09.2026
+
+### ✨ UI & UX Verbesserungen
+- ✅ Such-Input Styling optimiert (Weiße Schrift auf Dunkelgrün)
+- ✅ Autocomplete-Dropdown komplett deaktiviert
+- ✅ Search-Feld startet immer leer (localStorage Clear)
+- ✅ Kontrastverbesserung für bessere Lesbarkeit
+
+### 🐛 Bug Fixes
+- 🔧 Datei-Download 404-Fehler behoben (Datei-Namen UTF-8 Reparatur)
+- 🔧 "roger-manser" Standardwert im Such-Feld entfernt
+- 🔧 Browser-Cache-Clearing für saubere Neuladen
+- 🔧 Service Worker Cache-Invalidierung (CACHE_NAME Update)
+
+### 📝 Technische Änderungen
+- CSS: Search-Input mit `rgba(27, 94, 63, 0.4)` Background
+- JS: Aggressives localStorage Clearing (searchQuery, etc.)
+- JS: DOMContentLoaded + setupEventListeners() beide Clear-Aufrufe
+- Placeholder-Farbe: `rgba(255,255,255,0.7)` für Sichtbarkeit
+
+### 🚀 Session Fixes (v1.0.44–v1.0.53)
+| Version | Fix |
+|---------|-----|
+| 1.0.44 | Debug-Logging für File-Download, Autocomplete CSS |
+| 1.0.45 | Autocomplete-Vorschläge versteckt |
+| 1.0.46 | Search-Input explizit geleert |
+| 1.0.47 | Aggressives JavaScript Clearing |
+| 1.0.48–1.0.52 | Textfarbe Optimierung (Grün → Weiß) |
+| 1.0.53 | localStorage-Clear hinzugefügt |
+| **1.1.0** | **Release: Alle Fixes konsolidiert** |
+
+---
+
 ## Roadmap (Phase 2+)
 
-### [1.1.0] — Geplant
+### [1.2.0] — Geplant
 - [ ] QR-Code Generator (pro Gerät)
 - [ ] Wartungs-Log (Wartungsdatum, Notizen)
 - [ ] Export zu PDF (Gerätebericht)
 - [ ] Bildergalerie (Grid-View)
 
-### [1.2.0] — Geplant
+### [1.3.0] — Geplant
 - [ ] Kosten-Tracking (Kaufpreis, Reparaturen)
 - [ ] Volltextsuche mit Indexierung
 - [ ] Mehrsprachig (DE/EN/FR)
@@ -119,6 +152,6 @@ Alle nutzen gleiches Schema: MAJOR.MINOR.PATCH + VERSIONSHISTORIE.md
 
 ---
 
-**Aktuelle Version**: 1.0.0  
-**Letztes Update**: 30.08.2026 12:48 UTC  
+**Aktuelle Version**: 1.1.0  
+**Letztes Update**: 01.09.2026 09:10 UTC  
 **Nächstes Check**: [Offen]
