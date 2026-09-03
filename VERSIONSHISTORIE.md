@@ -26,6 +26,16 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.7] — 03.09.2026 (PATCH)
+
+### 🔍 Maximum Debug-Verbosity
+- 🔧 saveDevice() - Schritt-für-Schritt Logging (1️⃣ 2️⃣ 3️⃣ 4️⃣)
+- 🔧 Button-Click Logging ("🖱️ SPEICHERN BUTTON GEKLICKT")
+- 🔧 syncWithGitHub() - Komplettes Debug
+- 🔧 Zeigt: Buttons werden geklickt → Funktionen aufgerufen → Sync startet → GitHub Upload
+
+---
+
 ## [1.1.6] — 03.09.2026 (PATCH)
 
 ### 🔧 Aggressives Debug-Logging
