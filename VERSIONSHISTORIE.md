@@ -26,6 +26,17 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.9] — 03.09.2026 (CRITICAL BUG FIX)
+
+### 🔴 KRITISCHER BUG BEHOBEN!
+- 🔧 **saveDevice() war nicht async!** → loadDevices() wurde nicht awaited
+- 🔧 **deleteDevice() war nicht async!** → loadDevices() wurde nicht awaited
+- 🔧 Sync war erfolgreich (200), aber loadDevices() wurde nicht ausgeführt
+- 🔧 **BEHEBT:** Bestehende Geräte-Änderungen werden jetzt gespeichert!
+- 🔧 Beide Funktionen jetzt async + await für alle Operationen
+
+---
+
 ## [1.1.8] — 03.09.2026 (PATCH)
 
 ### 🔧 loadDevices() Debug
