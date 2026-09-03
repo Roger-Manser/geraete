@@ -26,6 +26,15 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.4] — 03.09.2026 (PATCH)
+
+### 🐛 Bug Fix
+- 🔧 ReferenceError behoben: `loadDevicesFromGitHub()` → `loadDevices()`
+- 🔧 Funktionsnamen konsistent gemacht
+- 🔧 App lädt jetzt Geräte richtig beim Start
+
+---
+
 ## [1.1.3] — 01.09.2026 (PATCH)
 
 ### 🔴 Browser-Autofill Nuklear-Option
@@ -181,6 +190,6 @@ Alle nutzen gleiches Schema: MAJOR.MINOR.PATCH + VERSIONSHISTORIE.md
 
 ---
 
-**Aktuelle Version**: 1.1.3  
-**Letztes Update**: 01.09.2026 09:43 UTC  
+**Aktuelle Version**: 1.1.4  
+**Letztes Update**: 03.09.2026 11:30 UTC  
 **Nächstes Check**: [Offen]
