@@ -26,6 +26,17 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.2.1] — 03.09.2026 (PATCH)
+
+### 🔍 Besseres Hersteller-Debugging
+- 🔧 Debug zeigt jetzt das GERÄT MIT "BOSE" - nicht das erste!
+- 🔧 Sucht nach `hersteller === 'Bose'` in allen Geräten
+- 🔧 Wenn nicht gefunden: Zeigt ALLE Hersteller in der Liste
+- 🔧 `📤 UPLOAD - BOSE GERÄT:` oder `⚠️ KEIN GERÄT MIT BOSE`
+- 🔧 `📥 GELADEN - BOSE GERÄT:` oder `⚠️ GELADEN - KEIN GERÄT MIT BOSE`
+
+---
+
 ## [1.2.0] — 03.09.2026 (MINOR: Cleanup)
 
 ### 🧹 Code-Cleanup & Fokussiertes Debugging
