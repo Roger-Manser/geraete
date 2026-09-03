@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.1.4)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.1.6)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.1.4</title>
+    <title>Geräteliste v1.1.6</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.1.4)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.1.6)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1119,7 +1119,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.1.4';
+        const APP_VERSION = '1.1.6';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -2284,19 +2284,29 @@ SHA: ${data.sha}`;
         }
 
         async function syncWithGitHub() {
+            console.log('🔄 SYNC START - Config:', app.githubConfig);
+            
             if (!app.githubConfig.user || !app.githubConfig.repo || !app.githubConfig.token) {
-                showToast('GitHub nicht konfiguriert', 'error');
+                console.error('❌ SYNC ABORT - Config fehlt!', {
+                    user: !!app.githubConfig.user,
+                    repo: !!app.githubConfig.repo,
+                    token: !!app.githubConfig.token
+                });
+                showToast('❌ GitHub nicht konfiguriert - Einstellungen checken!', 'error');
                 return;
             }
 
             showLoading('Synchronisiere mit GitHub...');
+            console.log('📤 Hochladen zu:', `${app.githubConfig.user}/${app.githubConfig.repo}`);
 
             try {
                 const apiUrl = `https://api.github.com/repos/${app.githubConfig.user}/${app.githubConfig.repo}/contents/data/geraete.json`;
+                console.log('🔗 API URL:', apiUrl);
                 
                 // Schritt 1: SHA der aktuellen Datei auslesen
                 let sha = null;
                 try {
+                    console.log('1️⃣ SHA auslesen...');
                     const getResponse = await fetch(apiUrl, {
                         headers: {
                             'Authorization': `token ${app.githubConfig.token}`,
@@ -2307,12 +2317,14 @@ SHA: ${data.sha}`;
                     if (getResponse.ok) {
                         const fileData = await getResponse.json();
                         sha = fileData.sha;
-                        console.log('Datei SHA gefunden:', sha);
+                        console.log('✅ SHA gefunden:', sha);
                     } else if (getResponse.status !== 404) {
-                        console.warn('Fehler beim SHA-Auslesen:', getResponse.status);
+                        console.warn('⚠️ SHA-Fehler:', getResponse.status, getResponse.statusText);
+                    } else {
+                        console.log('ℹ️ Datei existiert noch nicht (404)');
                     }
                 } catch (err) {
-                    console.warn('Could not read SHA:', err.message);
+                    console.warn('⚠️ SHA-Error (nicht kritisch):', err.message);
                 }
 
                 // Schritt 2: Neue Daten vorbereiten
@@ -2320,13 +2332,15 @@ SHA: ${data.sha}`;
                     geraete: app.devices,
                     lastSync: new Date().toISOString()
                 };
+                
+                console.log(`2️⃣ Vorbereiten - ${app.devices.length} Geräte`);
 
-                // EINFACHE, bewährte UTF-8 Base64 Methode
+                // UTF-8 Base64
                 const jsonString = JSON.stringify(data, null, 2);
-                // Direkt zu Base64 - GitHub API erwartet UTF-8 bytes als Base64
                 const content = btoa(unescape(encodeURIComponent(jsonString)));
+                console.log('✅ Base64 encoded:', content.substring(0, 50) + '...');
 
-                // Schritt 3: Upload-Body erstellen
+                // Schritt 3: Upload-Body
                 const uploadBody = {
                     message: `[Geräteliste] Sync ${new Date().toLocaleString('de-CH')}`,
                     content: content
@@ -2336,7 +2350,10 @@ SHA: ${data.sha}`;
                     uploadBody.sha = sha;
                 }
 
+                console.log('3️⃣ Upload-Body bereit');
+
                 // Schritt 4: Datei hochladen
+                console.log('4️⃣ PUT-Request senden...');
                 const uploadResponse = await fetch(apiUrl, {
                     method: 'PUT',
                     headers: {
@@ -2347,24 +2364,31 @@ SHA: ${data.sha}`;
                     body: JSON.stringify(uploadBody)
                 });
 
+                console.log('📊 Response Status:', uploadResponse.status);
+
                 if (uploadResponse.ok) {
+                    console.log('✅ GitHub Sync ERFOLGREICH!');
                     showToast('✅ Mit GitHub synchronisiert!', 'success');
-                    console.log('GitHub Sync erfolgreich');
+                    // Nach Sync: Von GitHub neu laden
+                    console.log('🔄 Lade Geräte neu...');
+                    await loadDevices();
+                    console.log('✅ Geräte neu geladen');
                 } else {
                     const errorData = await uploadResponse.json();
                     const errorMsg = errorData.message || uploadResponse.statusText;
-                    showToast(`❌ GitHub Fehler: ${errorMsg}`, 'error');
-                    console.error('GitHub Sync Fehler:', {
+                    console.error('❌ GitHub SYNC FEHLER:', {
                         status: uploadResponse.status,
                         message: errorMsg,
                         details: errorData
                     });
+                    showToast(`❌ GitHub Fehler: ${errorMsg}`, 'error');
                 }
             } catch (err) {
-                showToast('Sync-Fehler: ' + err.message, 'error');
-                console.error('Sync Error:', err);
+                console.error('💥 SYNC EXCEPTION:', err);
+                showToast('💥 Sync-Fehler: ' + err.message, 'error');
             } finally {
                 hideLoading();
+                console.log('🔄 SYNC END');
             }
         }
 

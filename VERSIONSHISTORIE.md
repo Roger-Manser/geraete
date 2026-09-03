@@ -26,6 +26,25 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.6] — 03.09.2026 (PATCH)
+
+### 🔧 Aggressives Debug-Logging
+- 🔧 Console-Logs in syncWithGitHub() für jeden Schritt
+- 🔧 Config-Check mit Details
+- 🔧 API-URL, SHA, Upload-Status - alles geloggt
+- 🔧 Einfach F12 → Console öffnen und Fehler sehen!
+
+---
+
+## [1.1.5] — 03.09.2026 (PATCH)
+
+### 🔄 Sync Fix
+- 🔧 `loadDevices()` wird nach erfolgreichem GitHub Upload aufgerufen
+- 🔧 Geräte werden jetzt nach dem Sync sofort aktualisiert
+- 🔧 Speichern & Löschen funktioniert wieder
+
+---
+
 ## [1.1.4] — 03.09.2026 (PATCH)
 
 ### 🐛 Bug Fix
