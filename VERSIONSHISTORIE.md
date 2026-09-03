@@ -26,6 +26,16 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.2.4] — 03.09.2026 (PATCH)
+
+### 🔍 Zeige LETZTE 30 Zeilen des JSON
+- 🔧 Jetzt werden die LETZTEN 30 Zeilen des JSON-Strings gezeigt (nicht die ersten!)
+- 🔧 Das letzte Gerät mit "Bose" sollte dort zu sehen sein
+- 🔧 Zeigt auch: `TOTAL: X` - Wie viele Zeilen der JSON hat
+- 🔧 Wird zeigen ob Bose wirklich im JSON ist oder nicht!
+
+---
+
 ## [1.2.3] — 03.09.2026 (PATCH)
 
 ### 🔍 JSON-Upload Debugging
