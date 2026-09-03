@@ -26,6 +26,20 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.2.0] — 03.09.2026 (MINOR: Cleanup)
+
+### 🧹 Code-Cleanup & Fokussiertes Debugging
+- 🔧 Alle unnötigen Debug-Logs entfernt
+- 🔧 **Fokus auf HERSTELLER-Feld nur:**
+  - `🔍 INPUT HERSTELLER:` - Was wurde eingegeben?
+  - `💾 RAM HERSTELLER:` - Was ist im RAM?
+  - `📤 UPLOAD - Erstes Gerät:` - Was wird hochgeladen?
+  - `📥 GELADEN - Erstes Gerät:` - Was wird von GitHub gelesen?
+- 🔧 Einfache, klare Logs - leicht zu verstehen
+- 🔧 Zum Debuggen: Öffne Console, ändere Hersteller, drücke Speichern → Logs anschauen!
+
+---
+
 ## [1.1.11] — 03.09.2026 (CRITICAL: GitHub Cache Fix)
 
 ### 🔴 GITHUB CACHE PROBLEM GELÖST!

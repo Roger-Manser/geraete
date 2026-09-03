@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.1.11)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.2.0)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.1.11</title>
+    <title>Geräteliste v1.2.0</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.1.11)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.2.0)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1119,7 +1119,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.1.11';
+        const APP_VERSION = '1.2.0';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1616,22 +1616,18 @@
         }
 
         async function saveDevice() {
-            console.log('💾 SAVE DEVICE START');
-            
             const name = document.getElementById('form-name').value.trim();
             const hersteller = document.getElementById('form-hersteller').value.trim();
             const modell = document.getElementById('form-modell').value.trim();
 
-            console.log('📝 Form-Daten:', {name, hersteller, modell});
+            console.log('🔍 INPUT HERSTELLER:', hersteller);
 
             if (!name) {
-                console.warn('⚠️ Name leer!');
                 showToast('Name ist erforderlich', 'error');
                 return;
             }
 
             if (!app.currentDevice) {
-                console.error('❌ Kein Gerät ausgewählt!');
                 showToast('Fehler: Kein Gerät ausgewählt', 'error');
                 return;
             }
@@ -1647,30 +1643,23 @@
             app.currentDevice.notizen = document.getElementById('form-notizen').value.trim();
             app.currentDevice.aktualisierAm = new Date().toISOString();
 
-            console.log('✏️ Gerät aktualisiert in RAM:', app.currentDevice.id);
+            console.log('💾 RAM HERSTELLER:', app.currentDevice.hersteller);
 
             // Nur zu Array hinzufügen wenn neu
             if (app.currentDevice.isNew) {
                 app.devices.push(app.currentDevice);
                 app.currentDevice.isNew = false;
-                console.log('✅ Neues Gerät zu Array hinzugefügt:', app.currentDevice.name);
             }
 
             // Modal schliessen
             closeDeviceModal();
-            console.log('1️⃣ Modal geschlossen');
             
             // Geräte rendern
             renderDevices();
-            console.log('2️⃣ Geräte gerendert');
             
             // Mit GitHub synchen!
-            console.log('3️⃣ Starte GitHub Sync...');
             await syncWithGitHub();
-            console.log('4️⃣ Sync erfolgreich - Daten sind im RAM!');
-            console.log('5️⃣ Speichern KOMPLETT!');
-            
-            console.log('💾 SAVE DEVICE END');
+            console.log('✅ SYNC FERTIG');
         }
 
         async function deleteDevice() {
@@ -2295,20 +2284,12 @@ SHA: ${data.sha}`;
         }
 
         async function syncWithGitHub() {
-            console.log('🔄 SYNC START - Config:', app.githubConfig);
-            
             if (!app.githubConfig.user || !app.githubConfig.repo || !app.githubConfig.token) {
-                console.error('❌ SYNC ABORT - Config fehlt!', {
-                    user: !!app.githubConfig.user,
-                    repo: !!app.githubConfig.repo,
-                    token: !!app.githubConfig.token
-                });
-                showToast('❌ GitHub nicht konfiguriert - Einstellungen checken!', 'error');
+                showToast('❌ GitHub nicht konfiguriert', 'error');
                 return;
             }
 
-            showLoading('Synchronisiere mit GitHub...');
-            console.log('📤 Hochladen zu:', `${app.githubConfig.user}/${app.githubConfig.repo}`);
+            showLoading('Synchronisiere...');
 
             try {
                 const apiUrl = `https://api.github.com/repos/${app.githubConfig.user}/${app.githubConfig.repo}/contents/data/geraete.json`;
@@ -2344,12 +2325,17 @@ SHA: ${data.sha}`;
                     lastSync: new Date().toISOString()
                 };
                 
-                console.log(`2️⃣ Vorbereiten - ${app.devices.length} Geräte`);
+                // 🔍 DEBUG: Zeige erstes Gerät mit Hersteller
+                if (app.devices.length > 0) {
+                    console.log('📤 UPLOAD - Erstes Gerät:', {
+                        name: app.devices[0].name,
+                        hersteller: app.devices[0].hersteller
+                    });
+                }
 
                 // UTF-8 Base64
                 const jsonString = JSON.stringify(data, null, 2);
                 const content = btoa(unescape(encodeURIComponent(jsonString)));
-                console.log('✅ Base64 encoded:', content.substring(0, 50) + '...');
 
                 // Schritt 3: Upload-Body
                 const uploadBody = {
@@ -2361,10 +2347,7 @@ SHA: ${data.sha}`;
                     uploadBody.sha = sha;
                 }
 
-                console.log('3️⃣ Upload-Body bereit');
-
-                // Schritt 4: Datei hochladen
-                console.log('4️⃣ PUT-Request senden...');
+                // Datei hochladen
                 const uploadResponse = await fetch(apiUrl, {
                     method: 'PUT',
                     headers: {
@@ -2375,15 +2358,10 @@ SHA: ${data.sha}`;
                     body: JSON.stringify(uploadBody)
                 });
 
-                console.log('📊 Response Status:', uploadResponse.status);
-
                 if (uploadResponse.ok) {
-                    console.log('✅ GitHub Sync ERFOLGREICH!');
-                    showToast('✅ Mit GitHub synchronisiert!', 'success');
-                    // 🔧 WICHTIG: Nicht neu laden! Die Daten sind bereits im RAM!
-                    // GitHub cache gibt sonst die alte Version zurück!
-                    console.log('5️⃣ Daten sind bereits aktuell im RAM - kein Reload nötig');
-                    renderDevices();  // Nur UI aktualisieren!
+                    console.log('✅ GitHub Upload erfolgreich');
+                    showToast('✅ Synchronisiert!', 'success');
+                    renderDevices();
                 } else {
                     const errorData = await uploadResponse.json();
                     const errorMsg = errorData.message || uploadResponse.statusText;
@@ -2404,7 +2382,6 @@ SHA: ${data.sha}`;
         }
 
         async function loadDevices() {
-            console.log('📥 LOAD DEVICES START');
             try {
                 const response = await fetch(
                     `https://api.github.com/repos/${app.githubConfig.user}/${app.githubConfig.repo}/contents/data/geraete.json`,
@@ -2457,29 +2434,35 @@ SHA: ${data.sha}`;
                     console.log('✅ NACH Reparatur (erste 200 chars):');
                     console.log(decodedString.substring(0, 200));
                     
-                    console.log('6️⃣ Parsing JSON...');
+                    
                     let content;
                     try {
                         content = JSON.parse(decodedString);
-                        console.log('7️⃣ JSON parsed erfolgreich');
+                        
                     } catch (parseErr) {
                         console.error('💥 JSON PARSE ERROR:', parseErr.message);
                         console.error('String bei Fehler:', decodedString.substring(0, 500));
                         throw parseErr;
                     }
                     
-                    console.log('8️⃣ Setze app.devices...');
+                    
                     app.devices = content.geraete || [];
+                    
+                    // 🔍 DEBUG: Zeige erstes Gerät mit Hersteller nach Laden
+                    if (app.devices.length > 0) {
+                        console.log('📥 GELADEN - Erstes Gerät:', {
+                            name: app.devices[0].name,
+                            hersteller: app.devices[0].hersteller
+                        });
+                    }
                     
                     console.log('9️⃣ renderDevices()...');
                     renderDevices();
                     
-                    console.log('✅ LOAD DEVICES SUCCESS - ' + app.devices.length + ' Geräte geladen');
+                    console.log('✅ LOAD DEVICES SUCCESS - ' + app.devices.length + ' Geräte');
                 }
             } catch (err) {
-                // File doesn't exist yet, start fresh
-                console.error('💥 LOAD DEVICES ERROR:', err.message);
-                console.error('Stack:', err.stack);
+                console.error('❌ Error beim Laden:', err.message);
                 app.devices = [];
                 renderDevices();
             }
