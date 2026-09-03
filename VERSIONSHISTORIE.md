@@ -26,6 +26,27 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.3.0] — 03.09.2026 (MAJOR: ROOT CAUSE FOUND!)
+
+### 🔴 KRITISCHER BUG BEHOBEN - Der Grund warum nichts gespeichert wurde!
+
+**Das Problem:** 
+- Zeile 1305 hatte: `app.currentDevice = { ...device };`
+- Das ist eine **KOPIE** des Geräts, nicht eine Referenz!
+- Wenn wir bearbeiten, bearbeiten wir die Kopie
+- Das Original im Array bleibt LEER!
+- Beim Upload wird das Original (mit leerem Hersteller) hochgeladen!
+
+**Die Lösung:**
+- Geändert zu: `app.currentDevice = device;`
+- Jetzt ist es eine **DIREKTE REFERENZ** zum Gerät im Array
+- Alle Änderungen gehen direkt ins Array!
+- Beim Upload sind die Daten bereits korrekt!
+
+**Resultat:** ✅ Alles wird jetzt gespeichert!
+
+---
+
 ## [1.2.4] — 03.09.2026 (PATCH)
 
 ### 🔍 Zeige LETZTE 30 Zeilen des JSON
