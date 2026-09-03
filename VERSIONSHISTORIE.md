@@ -26,6 +26,27 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.2.3] — 03.09.2026 (PATCH)
+
+### 🔍 JSON-Upload Debugging
+- 🔧 Zeigt den JSON-String der hochgeladen wird (erste 30 Zeilen)
+- 🔧 Überprüft ob das GEÄNDERTE Gerät im Array ist
+- 🔧 Zeigt: `✅ GERÄT GEFUNDEN im Array (Index X)` oder `❌ GERÄT NICHT IM ARRAY`
+- 🔧 Zeigt: `app.devices[X].hersteller = 'Bose'` (was im Array gespeichert ist)
+- 🔧 Wird zeigen ob Gerät nicht ins Array gepusht wurde!
+
+---
+
+## [1.2.2] — 03.09.2026 (PATCH)
+
+### 🔍 renderDevices() Debugging
+- 🔧 Zeigt alle Hersteller in der Liste wenn renderDevices() aufgerufen wird
+- 🔧 Logs zeigen welche Hersteller im RAM sind
+- 🔧 `📋 ALLE HERSTELLER:` nach jedem Render-Aufruf
+- 🔧 Wird zeigen ob "Bose" in der Liste ist aber nicht angezeigt wird
+
+---
+
 ## [1.2.1] — 03.09.2026 (PATCH)
 
 ### 🔍 Besseres Hersteller-Debugging
