@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.1.10)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.1.11)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.1.10</title>
+    <title>Geräteliste v1.1.11</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.1.10)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.1.11)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1119,7 +1119,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.1.10';
+        const APP_VERSION = '1.1.11';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1667,9 +1667,8 @@
             // Mit GitHub synchen!
             console.log('3️⃣ Starte GitHub Sync...');
             await syncWithGitHub();
-            console.log('4️⃣ Sync erfolgreich, lade neu...');
-            await loadDevices();
-            console.log('5️⃣ Geräte neu geladen!');
+            console.log('4️⃣ Sync erfolgreich - Daten sind im RAM!');
+            console.log('5️⃣ Speichern KOMPLETT!');
             
             console.log('💾 SAVE DEVICE END');
         }
@@ -1683,8 +1682,6 @@
             renderDevices();
             console.log('🗑️ Nach Löschen - Starte Sync...');
             await syncWithGitHub();
-            console.log('🗑️ Nach Löschen - Lade neu...');
-            await loadDevices();
             console.log('🗑️ Nach Löschen - Fertig!');
         }
 
@@ -2383,10 +2380,10 @@ SHA: ${data.sha}`;
                 if (uploadResponse.ok) {
                     console.log('✅ GitHub Sync ERFOLGREICH!');
                     showToast('✅ Mit GitHub synchronisiert!', 'success');
-                    // Nach Sync: Von GitHub neu laden
-                    console.log('🔄 Lade Geräte neu...');
-                    await loadDevices();
-                    console.log('✅ Geräte neu geladen');
+                    // 🔧 WICHTIG: Nicht neu laden! Die Daten sind bereits im RAM!
+                    // GitHub cache gibt sonst die alte Version zurück!
+                    console.log('5️⃣ Daten sind bereits aktuell im RAM - kein Reload nötig');
+                    renderDevices();  // Nur UI aktualisieren!
                 } else {
                     const errorData = await uploadResponse.json();
                     const errorMsg = errorData.message || uploadResponse.statusText;

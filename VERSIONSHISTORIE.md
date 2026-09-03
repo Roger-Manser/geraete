@@ -26,6 +26,17 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.11] — 03.09.2026 (CRITICAL: GitHub Cache Fix)
+
+### 🔴 GITHUB CACHE PROBLEM GELÖST!
+- 🔧 **Problem:** Upload erfolgreich, aber loadDevices() holte alte Daten (GitHub cache)
+- 🔧 **Lösung:** Nach Upload NICHT neu laden - Daten sind bereits im RAM korrekt!
+- 🔧 **Änderung:** Entfernte loadDevices() aus saveDevice() & deleteDevice()
+- 🔧 **Effekt:** renderDevices() aktualisiert die UI mit den aktuellen RAM-Daten
+- 🔧 **BEHEBT:** "Wird nicht gespeichert" Problem vollständig!
+
+---
+
 ## [1.1.10] — 03.09.2026 (PATCH)
 
 ### 🔧 JSON Parse Error-Handling
