@@ -241,7 +241,32 @@
       "standort": "Wohnzimmer",
       "notizen": "",
       "aktualisierAm": "2026-09-03T11:37:20.480Z"
+    },
+    {
+      "id": "1788435794114",
+      "erstelltAm": "2026-09-03T11:43:14.114Z",
+      "isNew": false,
+      "dateien": [
+        {
+          "id": "17884358918170",
+          "name": "Bose.pdf",
+          "type": "application/pdf",
+          "size": 505012,
+          "githubPath": "data/geraete/1788435794114/Bose.pdf",
+          "synced": true,
+          "hochgeladen": "2026-09-03T11:44:51.817Z"
+        }
+      ],
+      "name": "Kopfhörer",
+      "hersteller": "Bose",
+      "modell": "Bose QuietComfort",
+      "seriennummer": "",
+      "kaufdatum": "2025-09-20",
+      "garantiebis": "2027-09-19",
+      "standort": "Büro",
+      "notizen": "Kostenpflichtige Reparatur bis 19.9.2030",
+      "aktualisierAm": "2026-09-03T11:44:57.812Z"
     }
   ],
-  "lastSync": "2026-09-03T11:38:39.183Z"
+  "lastSync": "2026-09-03T11:44:58.217Z"
 }
