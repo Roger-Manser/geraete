@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.1.9)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.1.10)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.1.9</title>
+    <title>Geräteliste v1.1.10</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.1.9)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.1.10)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1119,7 +1119,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.1.9';
+        const APP_VERSION = '1.1.10';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -2460,32 +2460,23 @@ SHA: ${data.sha}`;
                     console.log('✅ NACH Reparatur (erste 200 chars):');
                     console.log(decodedString.substring(0, 200));
                     
-                    const content = JSON.parse(decodedString);
+                    console.log('6️⃣ Parsing JSON...');
+                    let content;
+                    try {
+                        content = JSON.parse(decodedString);
+                        console.log('7️⃣ JSON parsed erfolgreich');
+                    } catch (parseErr) {
+                        console.error('💥 JSON PARSE ERROR:', parseErr.message);
+                        console.error('String bei Fehler:', decodedString.substring(0, 500));
+                        throw parseErr;
+                    }
+                    
+                    console.log('8️⃣ Setze app.devices...');
                     app.devices = content.geraete || [];
                     
-                    console.log('📊 GERÄTE NACH REPARATUR:');
-                    app.devices.forEach((d, i) => {
-                        console.log(`  ${i}: name="${d.name}" | standort="${d.standort}"`);
-                        if (d.dateien) {
-                            d.dateien.forEach(f => {
-                                console.log(`    - Datei: "${f.name}"`);
-                            });
-                        }
-                    });
-                    
+                    console.log('9️⃣ renderDevices()...');
                     renderDevices();
                     
-                    console.log('📊 NACH REPARATUR:');
-                    app.devices.forEach((d, i) => {
-                        console.log(`  Gerät ${i}: name="${d.name}" | standort="${d.standort}"`);
-                        if (d.dateien) {
-                            d.dateien.forEach(f => {
-                                console.log(`    - Datei: "${f.name}"`);
-                            });
-                        }
-                    });
-                    
-                    renderDevices();
                     console.log('✅ LOAD DEVICES SUCCESS - ' + app.devices.length + ' Geräte geladen');
                 }
             } catch (err) {

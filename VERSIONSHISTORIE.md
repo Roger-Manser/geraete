@@ -26,6 +26,16 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.10] — 03.09.2026 (PATCH)
+
+### 🔧 JSON Parse Error-Handling
+- 🔧 Try-Catch um JSON.parse() hinzugefügt
+- 🔧 Zeigt exakten Fehler wenn JSON-Parsing crasht
+- 🔧 Zeigt String-Anfang bei Fehler für Debugging
+- 🔧 Detailed Error-Logs: 6️⃣ 7️⃣ 8️⃣ 9️⃣ Steps
+
+---
+
 ## [1.1.9] — 03.09.2026 (CRITICAL BUG FIX)
 
 ### 🔴 KRITISCHER BUG BEHOBEN!
