@@ -26,6 +26,16 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.1.8] — 03.09.2026 (PATCH)
+
+### 🔧 loadDevices() Debug
+- 🔧 Console Logs am Anfang & Ende
+- 🔧 Error-Stack bei Fehler anzeigen
+- 🔧 Wird zeigen ob loadDevices() crasht oder erfolgreich ist
+- 🔧 Findet warum bestehendes Geräte nicht gespeichert wird
+
+---
+
 ## [1.1.7] — 03.09.2026 (PATCH)
 
 ### 🔍 Maximum Debug-Verbosity
