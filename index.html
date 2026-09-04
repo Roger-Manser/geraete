@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.5.0)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.5.1)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.5.0</title>
+    <title>Geräteliste v1.5.1</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.5.0)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.5.1)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -1119,7 +1119,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.5.0';
+        const APP_VERSION = '1.5.1';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1227,7 +1227,6 @@
             document.getElementById('scanner-close').onclick = closeScannerModal;
             document.getElementById('btn-cancel').onclick = closeDeviceModal;
             document.getElementById('btn-save').onclick = () => {
-                console.log('🖱️ SPEICHERN BUTTON GEKLICKT');
                 saveDevice();
             };
             document.getElementById('btn-delete').onclick = deleteDevice;
@@ -1647,9 +1646,6 @@
             const hersteller = document.getElementById('form-hersteller').value.trim();
             const modell = document.getElementById('form-modell').value.trim();
 
-            
-            
-
             if (!name) {
                 showToast('Name ist erforderlich', 'error');
                 return;
@@ -1659,8 +1655,6 @@
                 showToast('Fehler: Kein Gerät ausgewählt', 'error');
                 return;
             }
-
-            
 
             // Geräte-Daten aktualisieren
             app.currentDevice.name = name;
@@ -1673,32 +1667,10 @@
             app.currentDevice.notizen = document.getElementById('form-notizen').value.trim();
             app.currentDevice.aktualisierAm = new Date().toISOString();
 
-            
-            
-            
-            // 🔍 DEBUG: Überprüfe ob das Gerät im Array ist
-            const index = app.devices.findIndex(d => d.id === app.currentDevice.id);
-            if (index !== -1) {
-                
-                
-                console.log('📝 app.devices[' + index + '].hersteller =', app.devices[index].hersteller);
-            } else {
-                
-                
-                
-            }
-
             // Nur zu Array hinzufügen wenn neu
             if (app.currentDevice.isNew) {
                 app.devices.push(app.currentDevice);
                 app.currentDevice.isNew = false;
-                
-            } else {
-                
-                const index2 = app.devices.findIndex(d => d.id === app.currentDevice.id);
-                if (index2 !== -1) {
-                    
-                }
             }
 
             // Modal schliessen
@@ -1709,7 +1681,6 @@
             
             // Mit GitHub synchen!
             await syncWithGitHub();
-            console.log('✅ SYNC FERTIG');
         }
 
         async function deleteDevice() {

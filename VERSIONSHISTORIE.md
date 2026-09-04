@@ -26,6 +26,15 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.5.1] — 04.09.2026 (PATCH)
+
+### 🔧 Syntax Error Fix
+- 🔧 Entfernte verwaiste Debug-Logs aus saveDevice()
+- 🔧 Bereinigt den Code nach sed-Befehlen
+- 🔧 Auto-Garantie funktioniert jetzt ohne Fehler
+
+---
+
 ## [1.5.0] — 03.09.2026 (FEATURE)
 
 ### ✨ Auto-Garantie Berechnung
