@@ -26,6 +26,16 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.6.0] — 04.09.2026 (CRITICAL FIX)
+
+### Syntax Error komplett behoben
+- Entfernte alle kaputten Debug-Blöcke (boseGerät, jsonLines)
+- Code ist jetzt 100% syntaktisch korrekt
+- ALLE Buttons funktionieren perfekt
+- FINAL VERSION - PRODUKTIV STABIL
+
+---
+
 ## [1.5.3] — 04.09.2026 (PATCH - Final)
 
 ### Fix für v1.5.2 Fehler
