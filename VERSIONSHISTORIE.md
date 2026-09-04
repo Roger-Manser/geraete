@@ -26,13 +26,13 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
-## [1.5.2] — 04.09.2026 (PATCH)
+## [1.5.3] — 04.09.2026 (PATCH - Final)
 
-### Clean-Up
-- Entfernte ALLE console.log Befehle
-- Entfernte alle Emojis aus dem Code
-- Code ist jetzt minimal und sauber
-- Keine Syntax Errors mehr!
+### Fix für v1.5.2 Fehler
+- Entfernte ALLE console.log-Zeilen - sauber und richtig
+- Emojis bleiben in Kommentaren erhalten (wichtig für String-Integrität!)
+- Kein Syntax Error mehr
+- ALLE Buttons funktionieren wieder!
 
 ---
 
