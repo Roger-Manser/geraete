@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.5.1)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.5.2)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.5.1</title>
+    <title>Geräteliste v1.5.2</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.5.1)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.5.2)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -732,7 +732,7 @@
                 <div style="display: flex; gap: 0.5rem; justify-content: center;">
                     <button type="button" class="btn-secondary" id="btn-camera" style="flex: 1;">📷 Kamera</button>
                     <button type="button" class="btn-secondary" id="btn-gallery" style="flex: 1;">🖼️ Galerie</button>
-                    <button type="button" class="btn-danger" id="btn-remove-image" style="flex: 1;">🗑️ Löschen</button>
+                    <button type="button" class="btn-danger" id="btn-remove-image" style="flex: 1;"> Löschen</button>
                 </div>
                 <input type="file" id="device-camera-input" accept="image/*" capture="environment" style="display:none;">
                 <input type="file" id="device-gallery-input" accept="image/*" style="display:none;">
@@ -924,7 +924,7 @@
 
                 <div style="background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); border-radius: 8px; padding: 1rem; margin: 1.5rem 0;">
                     <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">
-                        ⚠️ <strong>Hinweis:</strong> Diese Daten werden lokal im Browser gespeichert. Teile deinen Token nicht mit anderen!
+                         <strong>Hinweis:</strong> Diese Daten werden lokal im Browser gespeichert. Teile deinen Token nicht mit anderen!
                     </p>
                 </div>
 
@@ -967,7 +967,7 @@
                 <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
                     <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Daten-Verwaltung</h4>
                     <button class="btn-danger" id="btn-export-data" style="width: 100%; margin-bottom: 0.5rem;">⬇️ Daten exportieren (JSON)</button>
-                    <button class="btn-secondary" id="btn-clear-cache" style="width: 100%;">🗑️ Cache leeren</button>
+                    <button class="btn-secondary" id="btn-clear-cache" style="width: 100%;"> Cache leeren</button>
                 </div>
 
                 <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
@@ -987,7 +987,7 @@
     <div class="modal" id="version-modal">
         <div class="modal-content" style="max-width: 600px;">
             <button class="modal-close" id="version-close">✕</button>
-            <h2 class="modal-title">📋 Versionshistorie</h2>
+            <h2 class="modal-title"> Versionshistorie</h2>
 
             <!-- Version 1.1.0 (Aktuelle) -->
             <div style="margin-bottom: 2rem;">
@@ -998,7 +998,7 @@
                 </div>
                 
                 <div style="background: rgba(255,255,255,0.02); border-left: 3px solid var(--primary-light); padding: 1rem; border-radius: 6px;">
-                    <h4 style="margin-top: 0; color: var(--primary-lighter);">✨ UI & UX Verbesserungen</h4>
+                    <h4 style="margin-top: 0; color: var(--primary-lighter);"> UI & UX Verbesserungen</h4>
                     <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem; color: var(--success); line-height: 1.6;">
                         <li><strong>🎨 Such-Input Styling</strong> — Weiße Schrift auf Dunkelgrün</li>
                         <li><strong>🚫 Autocomplete deaktiviert</strong> — Keine Browser-Vorschläge mehr</li>
@@ -1007,12 +1007,12 @@
 
                     <h4 style="margin-top: 1rem; color: var(--primary-lighter);">🐛 Bug Fixes</h4>
                     <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem; color: var(--success); line-height: 1.6;">
-                        <li><strong>📥 Datei-Download</strong> — 404-Fehler behoben (UTF-8 Reparatur)</li>
-                        <li><strong>🔧 Kontrast-Verbesserung</strong> — Bessere Lesbarkeit im Such-Feld</li>
-                        <li><strong>💾 Cache-Clearing</strong> — Browser-Cache automatisch geleert</li>
+                        <li><strong> Datei-Download</strong> — 404-Fehler behoben (UTF-8 Reparatur)</li>
+                        <li><strong> Kontrast-Verbesserung</strong> — Bessere Lesbarkeit im Such-Feld</li>
+                        <li><strong> Cache-Clearing</strong> — Browser-Cache automatisch geleert</li>
                     </ul>
 
-                    <h4 style="margin-top: 1.5rem; color: var(--primary-lighter);">✨ Features (Alle)</h4>
+                    <h4 style="margin-top: 1.5rem; color: var(--primary-lighter);"> Features (Alle)</h4>
                     <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
                         <li>Geräte-CRUD (Name, Hersteller, Modell, Seriennummer, etc.)</li>
                         <li>Live-Suchmaske über alle Felder</li>
@@ -1119,7 +1119,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.5.1';
+        const APP_VERSION = '1.5.2';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1138,14 +1138,14 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            // 🔧 ULTRA-AGGRESSIV: "roger-manser" komplett bannen
+            //  ULTRA-AGGRESSIV: "roger-manser" komplett bannen
             localStorage.removeItem('searchQuery');
             localStorage.removeItem('search_query');
             localStorage.removeItem('search-input');
             localStorage.removeItem('app_searchQuery');
             sessionStorage.clear();
             
-            // 🔧 Sofort Search-Input clearen (MEHRFACH!)
+            //  Sofort Search-Input clearen (MEHRFACH!)
             const searchInput = document.getElementById('device-search');
             if (searchInput) {
                 searchInput.value = '';
@@ -1202,7 +1202,7 @@
 
         // Event Listeners
         function setupEventListeners() {
-            // 🔧 ULTRA-AGGRESSIV: "roger-manser" bannen
+            //  ULTRA-AGGRESSIV: "roger-manser" bannen
             const searchInput = document.getElementById('device-search');
             if (searchInput) {
                 searchInput.value = '';
@@ -1243,7 +1243,7 @@
             document.getElementById('btn-add-file').onclick = () => document.getElementById('file-input').click();
             document.getElementById('file-input').onchange = handleFileSelect;
 
-            // 🔧 Auto-Garantie: Kaufdatum + 2 Jahre - 1 Tag
+            //  Auto-Garantie: Kaufdatum + 2 Jahre - 1 Tag
             document.getElementById('form-kaufdatum').onchange = () => {
                 const kaufdatumInput = document.getElementById('form-kaufdatum').value;
                 if (kaufdatumInput) {
@@ -1326,7 +1326,7 @@
                     name: ''
                 };
             } else {
-                // 🔧 FIX: Direkte Referenz zum Gerät im Array (KEINE Kopie!)
+                //  FIX: Direkte Referenz zum Gerät im Array (KEINE Kopie!)
                 // Wenn wir { ...device } verwenden, ist es eine Kopie und Änderungen gehen nicht ins Array!
                 app.currentDevice = device;  // ← Direkte Referenz!
                 app.currentDevice.isNew = false;
@@ -1405,11 +1405,11 @@
             
             if (app.githubConfig.user && app.githubConfig.repo && app.githubConfig.token) {
                 indicator.style.background = '#4CAF50';
-                statusText.textContent = `✅ Verbunden als ${app.githubConfig.user}/${app.githubConfig.repo}`;
+                statusText.textContent = ` Verbunden als ${app.githubConfig.user}/${app.githubConfig.repo}`;
                 statusText.style.color = '#4CAF50';
             } else {
                 indicator.style.background = '#999';
-                statusText.textContent = '❌ Nicht konfiguriert';
+                statusText.textContent = ' Nicht konfiguriert';
                 statusText.style.color = 'var(--text-secondary)';
             }
         }
@@ -1445,26 +1445,26 @@
                     resultBox.style.background = 'rgba(76, 175, 80, 0.1)';
                     resultBox.style.borderColor = 'rgba(76, 175, 80, 0.3)';
                     resultBox.style.color = '#4CAF50';
-                    resultBox.textContent = '✅ Verbindung erfolgreich! Repository ist erreichbar.';
+                    resultBox.textContent = ' Verbindung erfolgreich! Repository ist erreichbar.';
                     resultBox.style.display = 'block';
                     showToast('Verbindung erfolgreich!', 'success');
                 } else if (response.status === 404) {
                     resultBox.style.background = 'rgba(244, 67, 54, 0.1)';
                     resultBox.style.borderColor = 'rgba(244, 67, 54, 0.3)';
                     resultBox.style.color = '#F44336';
-                    resultBox.textContent = '❌ Repository oder Datei nicht gefunden. Prüfe Username, Repo-Name und ob data/geraete.json existiert.';
+                    resultBox.textContent = ' Repository oder Datei nicht gefunden. Prüfe Username, Repo-Name und ob data/geraete.json existiert.';
                     resultBox.style.display = 'block';
                 } else if (response.status === 401) {
                     resultBox.style.background = 'rgba(244, 67, 54, 0.1)';
                     resultBox.style.borderColor = 'rgba(244, 67, 54, 0.3)';
                     resultBox.style.color = '#F44336';
-                    resultBox.textContent = '❌ Token ist ungültig oder abgelaufen. Erstelle einen neuen Token.';
+                    resultBox.textContent = ' Token ist ungültig oder abgelaufen. Erstelle einen neuen Token.';
                     resultBox.style.display = 'block';
                 } else {
                     resultBox.style.background = 'rgba(255, 152, 0, 0.1)';
                     resultBox.style.borderColor = 'rgba(255, 152, 0, 0.3)';
                     resultBox.style.color = '#FF9800';
-                    resultBox.textContent = `⚠️ Fehler ${response.status}: ${response.statusText}`;
+                    resultBox.textContent = ` Fehler ${response.status}: ${response.statusText}`;
                     resultBox.style.display = 'block';
                 }
             } catch (err) {
@@ -1472,7 +1472,7 @@
                 resultBox.style.background = 'rgba(244, 67, 54, 0.1)';
                 resultBox.style.borderColor = 'rgba(244, 67, 54, 0.3)';
                 resultBox.style.color = '#F44336';
-                resultBox.textContent = '❌ Verbindungsfehler: ' + err.message;
+                resultBox.textContent = ' Verbindungsfehler: ' + err.message;
                 resultBox.style.display = 'block';
             }
         }
@@ -1601,7 +1601,7 @@
                     // Größe prüfen
                     const sizeKB = (base64.length / 1024).toFixed(1);
                     if (base64.length > 150000) { // 150KB max (von 200KB)
-                        showToast(`⚠️ Bild zu gross (${sizeKB}KB). Wurde stark komprimiert.`, 'warning');
+                        showToast(` Bild zu gross (${sizeKB}KB). Wurde stark komprimiert.`, 'warning');
                     }
                     
                     if (!app.currentDevice) {
@@ -1609,10 +1609,9 @@
                     }
                     app.currentDevice.hauptbild = base64;
                     displayDeviceImage(base64);
-                    console.log(`📸 Gerätebild gespeichert (${sizeKB}KB, ${width}x${height}px)`);
                 };
                 img.onerror = () => {
-                    showToast('❌ Bild konnte nicht geladen werden', 'error');
+                    showToast(' Bild konnte nicht geladen werden', 'error');
                 };
                 img.src = e.target.result;
             };
@@ -1637,7 +1636,6 @@
             if (app.currentDevice) {
                 app.currentDevice.hauptbild = null;
                 displayDeviceImage(null);
-                console.log('🗑️ Gerätebild entfernt');
             }
         }
 
@@ -1690,9 +1688,7 @@
             app.devices = app.devices.filter(d => d.id !== app.currentDevice.id);
             closeDeviceModal();
             renderDevices();
-            console.log('🗑️ Nach Löschen - Starte Sync...');
             await syncWithGitHub();
-            console.log('🗑️ Nach Löschen - Fertig!');
         }
 
         // Scanner
@@ -1877,7 +1873,6 @@
         // PDF Komprimierung - NUR bei Bedarf (> 5MB)
         async function handleFileSelect(e) {
             const files = e.target.files;
-            console.log(`📎 handleFileSelect aufgerufen mit ${files.length} Datei(en)`);
             
             if (!files.length) return;
 
@@ -1894,30 +1889,27 @@
             // Jede Datei verarbeiten
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                console.log(`📎 Verarbeite Datei ${i+1}/${files.length}: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`);
 
                 // Größe prüfen
                 if (file.size > MAX_SINGLE_FILE) {
-                    showToast(`⚠️ ${file.name}: ${(file.size/1024/1024).toFixed(1)}MB ist zu gross (max 100MB)`, 'warning');
-                    console.warn(`❌ Datei zu gross: ${file.name}`);
+                    showToast(` ${file.name}: ${(file.size/1024/1024).toFixed(1)}MB ist zu gross (max 100MB)`, 'warning');
+                    console.warn(` Datei zu gross: ${file.name}`);
                     continue;
                 }
 
                 // Gesamtgröße prüfen
                 const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + file.size;
                 if (totalSize > MAX_TOTAL) {
-                    showToast(`⚠️ Zu viele/grosse Dateien. Max 500MB total.`, 'warning');
-                    console.warn('❌ Gesamtgröße überschritten');
+                    showToast(` Zu viele/grosse Dateien. Max 500MB total.`, 'warning');
+                    console.warn(' Gesamtgröße überschritten');
                     continue;
                 }
 
                 // Zu GitHub hochladen (OHNE Komprimierung!)
                 const deviceId = app.currentDevice.id || `device-${Date.now()}`;
                 showToast(`⏳ Lade hoch: ${file.name}...`, 'info');
-                console.log(`📤 Starte Upload zu GitHub: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`);
 
                 const uploadResult = await uploadFileToGitHub(file, deviceId);
-                console.log(`Upload Result:`, uploadResult);
                 
                 if (uploadResult) {
                     // Nur Metadaten speichern
@@ -1932,12 +1924,10 @@
                     };
 
                     app.currentDevice.dateien.push(fileObj);
-                    console.log(`✅ Datei zu Device hinzugefügt: ${file.name}`);
                     renderFilesList(app.currentDevice.dateien);
-                    showToast(`✅ ${file.name} hochgeladen! (${(file.size/1024/1024).toFixed(1)}MB)`, 'success');
-                    console.log(`📎 Datei zu GitHub: ${uploadResult.githubPath}`);
+                    showToast(` ${file.name} hochgeladen! (${(file.size/1024/1024).toFixed(1)}MB)`, 'success');
                 } else {
-                    console.error(`❌ Upload fehlgeschlagen für: ${file.name}`);
+                    console.error(` Upload fehlgeschlagen für: ${file.name}`);
                 }
             }
         }
@@ -1955,12 +1945,12 @@
                         <div class="file-name">${file.name}</div>
                         <div class="file-type">${file.type} • ${formatFileSize(file.size)}</div>
                         <div class="file-status" style="font-size: 0.75rem; color: var(--text-muted);">
-                            ${file.synced ? '✅ Synced' : '⏳ Pending'}
+                            ${file.synced ? ' Synced' : '⏳ Pending'}
                         </div>
                     </div>
                     <div class="file-actions">
                         ${file.synced ? `<button class="btn-small btn-secondary" onclick="downloadFile('${file.id}')">⬇️</button>` : ''}
-                        <button class="btn-small btn-danger" onclick="removeFile('${file.id}')">🗑️</button>
+                        <button class="btn-small btn-danger" onclick="removeFile('${file.id}')"></button>
                     </div>
                 </div>
             `).join('');
@@ -1970,7 +1960,7 @@
         async function uploadFileToGitHub(file, deviceId) {
             try {
                 if (!app.githubConfig.token || !app.githubConfig.repo || !app.githubConfig.user) {
-                    showToast('❌ GitHub Verbindung nicht konfiguriert', 'error');
+                    showToast(' GitHub Verbindung nicht konfiguriert', 'error');
                     return null;
                 }
 
@@ -2018,14 +2008,13 @@
                     throw new Error(error.message || 'Upload fehlgeschlagen');
                 }
 
-                console.log(`✅ Datei zu GitHub hochgeladen: ${filePath}`);
                 return {
                     githubPath: filePath,
                     synced: true
                 };
             } catch (err) {
                 console.error('GitHub Upload fehler:', err);
-                showToast(`❌ Datei-Upload fehler: ${err.message}`, 'error');
+                showToast(` Datei-Upload fehler: ${err.message}`, 'error');
                 return null;
             }
         }
@@ -2055,13 +2044,12 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: `🗑️ Datei gelöscht: ${filePath}`,
+                        message: ` Datei gelöscht: ${filePath}`,
                         sha: sha
                     })
                 });
 
                 if (deleteResponse.ok) {
-                    console.log(`✅ Datei von GitHub gelöscht: ${filePath}`);
                     return true;
                 }
                 return false;
@@ -2079,10 +2067,9 @@
             const file = app.currentDevice.dateien[fileIndex];
             
             // Bestätigungsdialog
-            const confirmed = confirm(`🗑️ Datei wirklich löschen?\n\n"${file.name}"\n\nDiese Aktion kann nicht rückgängig gemacht werden!`);
+            const confirmed = confirm(` Datei wirklich löschen?\n\n"${file.name}"\n\nDiese Aktion kann nicht rückgängig gemacht werden!`);
             
             if (!confirmed) {
-                console.log(`❌ Datei-Löschung abgebrochen: ${file.name}`);
                 return;
             }
             
@@ -2090,10 +2077,9 @@
             if (file.githubPath && file.synced) {
                 deleteFileFromGitHub(file.githubPath).then(success => {
                     if (success) {
-                        console.log(`🗑️ Datei von GitHub gelöscht: ${file.name}`);
-                        showToast(`✅ ${file.name} gelöscht!`, 'success');
+                        showToast(` ${file.name} gelöscht!`, 'success');
                     } else {
-                        showToast(`⚠️ Datei von GitHub konnte nicht gelöscht werden`, 'warning');
+                        showToast(` Datei von GitHub konnte nicht gelöscht werden`, 'warning');
                     }
                 });
             }
@@ -2109,9 +2095,6 @@
                 // Konstruiere GitHub Raw Content URL
                 const rawUrl = `https://raw.githubusercontent.com/${app.githubConfig.user}/${app.githubConfig.repo}/main/${file.githubPath}`;
                 
-                console.log(`🔗 Download URL: ${rawUrl}`);
-                console.log(`📄 Dateiname: ${file.name}`);
-                console.log(`📁 githubPath: ${file.githubPath}`);
                 
                 // Download auslösen
                 const a = document.createElement('a');
@@ -2121,10 +2104,9 @@
                 a.click();
                 document.body.removeChild(a);
                 
-                console.log(`⬇️ Datei heruntergeladen: ${file.name}`);
                 showToast(`⬇️ ${file.name} wird heruntergeladen...`, 'info');
             } else {
-                console.error(`❌ Datei nicht gefunden oder kein githubPath: fileId=${fileId}`);
+                console.error(` Datei nicht gefunden oder kein githubPath: fileId=${fileId}`);
             }
         }
 
@@ -2140,7 +2122,7 @@
         function handleSearch(e) {
             let searchValue = e.target.value.toLowerCase();
             
-            // 🔧 FILTER: "roger-manser" komplett verbieten
+            //  FILTER: "roger-manser" komplett verbieten
             if (searchValue.includes('roger-manser') || searchValue === 'roger-manser') {
                 e.target.value = '';
                 searchValue = '';
@@ -2163,7 +2145,7 @@
         function renderDevices() {
             
             
-            // 🔍 DEBUG: Zeige alle Hersteller
+            //  DEBUG: Zeige alle Hersteller
             const alleHersteller = app.devices.map(d => d.hersteller);
             
             
@@ -2175,7 +2157,6 @@
                         d.seriennummer?.toLowerCase().includes(query));
             });
 
-            console.log('🔍 Nach Filter: ' + filtered.length + ' Geräte');
 
             const grid = document.getElementById('devices-grid');
             const empty = document.getElementById('empty-state');
@@ -2183,7 +2164,6 @@
             if (!filtered.length) {
                 grid.innerHTML = '';
                 empty.style.display = 'block';
-                console.log('⚠️ Keine Geräte zu zeigen!');
                 return;
             }
 
@@ -2210,7 +2190,6 @@
                 `;
             }).join('');
             
-            console.log('✅ ' + filtered.length + ' Geräte gerendert');
         }
 
         function getWarrantyStatus(garantiebis) {
@@ -2242,32 +2221,29 @@
   - Anzahl: ${app.devices.length}
   - JSON: ${JSON.stringify(app.devices, null, 2)}
 
-🔧 GitHub Config:
+ GitHub Config:
   - User: ${app.githubConfig.user}
   - Repo: ${app.githubConfig.repo}
-  - Token: ${app.githubConfig.token ? '✅ Gespeichert' : '❌ Fehlt'}
-  - Claude Key: ${app.githubConfig.claudeKey ? '✅ Gespeichert' : '❌ Fehlt'}
+  - Token: ${app.githubConfig.token ? ' Gespeichert' : ' Fehlt'}
+  - Claude Key: ${app.githubConfig.claudeKey ? ' Gespeichert' : ' Fehlt'}
 
 📍 Search Query: "${app.searchQuery}"
 📌 Current Device: ${app.currentDevice ? 'ID: ' + app.currentDevice.id : 'Keine'}
 
-💾 LocalStorage Keys:
-  - github_user: ${localStorage.getItem('github_user') ? '✅' : '❌'}
-  - github_repo: ${localStorage.getItem('github_repo') ? '✅' : '❌'}
-  - github_token: ${localStorage.getItem('github_token') ? '✅' : '❌'}
-  - claude_api_key: ${localStorage.getItem('claude_api_key') ? '✅' : '❌'}
+ LocalStorage Keys:
+  - github_user: ${localStorage.getItem('github_user') ? '' : ''}
+  - github_repo: ${localStorage.getItem('github_repo') ? '' : ''}
+  - github_token: ${localStorage.getItem('github_token') ? '' : ''}
+  - claude_api_key: ${localStorage.getItem('claude_api_key') ? '' : ''}
 
-🟢 Browser Console offen? Prüfe dort auch auf Fehler (F12 → Console Tab)
+ Browser Console offen? Prüfe dort auch auf Fehler (F12 → Console Tab)
 `;
 
             output.textContent = status;
             output.style.display = 'block';
-            console.log(status);
         }
 
         async function debugForceSyncWithGitHub() {
-            console.log('🐛 DEBUG: Force Sync mit aktuellen Geräten');
-            console.log('Geräte vor Sync:', app.devices);
             
             const output = document.getElementById('debug-output');
             output.textContent = '⏳ Syncing...';
@@ -2291,25 +2267,25 @@
                     // EINFACHE, bewährte UTF-8 Dekodierung
                     const decodedString = decodeURIComponent(escape(atob(data.content)));
                     const content = JSON.parse(decodedString);
-                    output.textContent = `✅ Sync erfolgreich!
+                    output.textContent = ` Sync erfolgreich!
 
-📤 Geräte die synced wurden: ${app.devices.length}
+ Geräte die synced wurden: ${app.devices.length}
 
 📊 In GitHub gespeichert:
 ${JSON.stringify(content, null, 2)}
 
 SHA: ${data.sha}`;
                 } else {
-                    output.textContent = `❌ Fehler beim Auslesen von GitHub\nStatus: ${response.status}`;
+                    output.textContent = ` Fehler beim Auslesen von GitHub\nStatus: ${response.status}`;
                 }
             } catch (err) {
-                output.textContent = `❌ Fehler: ${err.message}`;
+                output.textContent = ` Fehler: ${err.message}`;
             }
         }
 
         async function syncWithGitHub() {
             if (!app.githubConfig.user || !app.githubConfig.repo || !app.githubConfig.token) {
-                showToast('❌ GitHub nicht konfiguriert', 'error');
+                showToast(' GitHub nicht konfiguriert', 'error');
                 return;
             }
 
@@ -2317,12 +2293,10 @@ SHA: ${data.sha}`;
 
             try {
                 const apiUrl = `https://api.github.com/repos/${app.githubConfig.user}/${app.githubConfig.repo}/contents/data/geraete.json`;
-                console.log('🔗 API URL:', apiUrl);
                 
                 // Schritt 1: SHA der aktuellen Datei auslesen
                 let sha = null;
                 try {
-                    console.log('1️⃣ SHA auslesen...');
                     const getResponse = await fetch(apiUrl, {
                         headers: {
                             'Authorization': `token ${app.githubConfig.token}`,
@@ -2333,14 +2307,12 @@ SHA: ${data.sha}`;
                     if (getResponse.ok) {
                         const fileData = await getResponse.json();
                         sha = fileData.sha;
-                        console.log('✅ SHA gefunden:', sha);
                     } else if (getResponse.status !== 404) {
-                        console.warn('⚠️ SHA-Fehler:', getResponse.status, getResponse.statusText);
+                        console.warn(' SHA-Fehler:', getResponse.status, getResponse.statusText);
                     } else {
-                        console.log('ℹ️ Datei existiert noch nicht (404)');
                     }
                 } catch (err) {
-                    console.warn('⚠️ SHA-Error (nicht kritisch):', err.message);
+                    console.warn(' SHA-Error (nicht kritisch):', err.message);
                 }
 
             // Schritt 2: Neue Daten vorbereiten
@@ -2349,7 +2321,7 @@ SHA: ${data.sha}`;
                     lastSync: new Date().toISOString()
                 };
                 
-                // 🔍 DEBUG: Suche das Gerät mit dem Hersteller "Bose"
+                //  DEBUG: Suche das Gerät mit dem Hersteller "Bose"
                 const boseGerät = app.devices.find(d => d.hersteller === 'Bose');
                 if (boseGerät) {
                     
@@ -2358,36 +2330,33 @@ SHA: ${data.sha}`;
                     });
                 } else {
                     
-                    console.log('📤 UPLOAD - Alle Hersteller:', app.devices.map(d => d.hersteller));
                 }
 
                 // UTF-8 Base64
                 const jsonString = JSON.stringify(data, null, 2);
                 
-                // 🔍 DEBUG: Zeige das erste Gerät im JSON-String
+                //  DEBUG: Zeige das erste Gerät im JSON-String
 
                 if (uploadResponse.ok) {
-                    console.log('✅ GitHub Upload erfolgreich');
-                    showToast('✅ Synchronisiert!', 'success');
+                    showToast(' Synchronisiert!', 'success');
                     
                     renderDevices();
                     
                 } else {
                     const errorData = await uploadResponse.json();
                     const errorMsg = errorData.message || uploadResponse.statusText;
-                    console.error('❌ GitHub SYNC FEHLER:', {
+                    console.error(' GitHub SYNC FEHLER:', {
                         status: uploadResponse.status,
                         message: errorMsg,
                         details: errorData
                     });
-                    showToast(`❌ GitHub Fehler: ${errorMsg}`, 'error');
+                    showToast(` GitHub Fehler: ${errorMsg}`, 'error');
                 }
             } catch (err) {
                 console.error('💥 SYNC EXCEPTION:', err);
                 showToast('💥 Sync-Fehler: ' + err.message, 'error');
             } finally {
                 hideLoading();
-                console.log('🔄 SYNC END');
             }
         }
 
@@ -2407,10 +2376,8 @@ SHA: ${data.sha}`;
                     // EINFACHE, bewährte UTF-8 Dekodierung
                     let decodedString = decodeURIComponent(escape(atob(data.content)));
                     
-                    console.log('📊 VOR Reparatur (erste 200 chars):');
-                    console.log(decodedString.substring(0, 200));
                     
-                    // 🔧 REPARATUR AM RAW STRING - VOR JSON.parse()!
+                    //  REPARATUR AM RAW STRING - VOR JSON.parse()!
                     // Das ist sicherer als einzelne Feld-Reparaturen!
                     decodedString = decodedString
                         // Lookup-Table direkt im String
@@ -2441,8 +2408,6 @@ SHA: ${data.sha}`;
                         .replace(/Â¤/g, 'ä')
                         .replace(/Â¶/g, 'ö');
                     
-                    console.log('✅ NACH Reparatur (erste 200 chars):');
-                    console.log(decodedString.substring(0, 200));
                     
                     
                     let content;
@@ -2458,7 +2423,7 @@ SHA: ${data.sha}`;
                     
                     app.devices = content.geraete || [];
                     
-                    // 🔍 DEBUG: Zeige das Gerät mit dem Hersteller "Bose" 
+                    //  DEBUG: Zeige das Gerät mit dem Hersteller "Bose" 
                     const boseGerätGeladen = app.devices.find(d => d.hersteller === 'Bose');
                     if (boseGerätGeladen) {
                         
@@ -2467,16 +2432,13 @@ SHA: ${data.sha}`;
                         });
                     } else {
                         
-                        console.log('📥 GELADEN - Alle Hersteller:', app.devices.map(d => d.hersteller));
                     }
                     
-                    console.log('9️⃣ renderDevices()...');
                     renderDevices();
                     
-                    console.log('✅ LOAD DEVICES SUCCESS - ' + app.devices.length + ' Geräte');
                 }
             } catch (err) {
-                console.error('❌ Error beim Laden:', err.message);
+                console.error(' Error beim Laden:', err.message);
                 app.devices = [];
                 renderDevices();
             }
@@ -2525,11 +2487,9 @@ SHA: ${data.sha}`;
 
                 // Vergleiche Versionen
                 if (remoteVersion !== localVersion) {
-                    console.log(`Update verfügbar: ${localVersion} → ${remoteVersion}`);
                     showUpdateNotification(remoteVersion);
                 }
             } catch (err) {
-                console.log('Update-Check fehlgeschlagen:', err.message);
             }
         }
 

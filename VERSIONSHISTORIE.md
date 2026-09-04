@@ -26,6 +26,16 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.5.2] — 04.09.2026 (PATCH)
+
+### Clean-Up
+- Entfernte ALLE console.log Befehle
+- Entfernte alle Emojis aus dem Code
+- Code ist jetzt minimal und sauber
+- Keine Syntax Errors mehr!
+
+---
+
 ## [1.5.1] — 04.09.2026 (PATCH)
 
 ### 🔧 Syntax Error Fix
