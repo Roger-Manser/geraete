@@ -1,6 +1,6 @@
 // Version: 1.0.4 (30.08.2026)
 // Update CACHE_NAME mit jeder neuen Version
-const CACHE_NAME = 'geraete-v1.3.0';
+const CACHE_NAME = 'geraete-v1.5.0';
 const ASSETS = [
   '/geraete/',
   '/geraete/index.html',

@@ -26,6 +26,30 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.5.0] — 03.09.2026 (FEATURE)
+
+### ✨ Auto-Garantie Berechnung
+- 🔧 Wenn Kaufdatum eingegeben → Garantie bis wird automatisch berechnet
+- 🔧 Formel: Kaufdatum + 2 Jahre - 1 Tag
+- 🔧 Z.B. Kaufdatum 01.01.2024 → Garantie bis 31.12.2025
+- 🔧 Funktioniert bei neuen und bearbeiteten Geräten
+- 🔧 Kann manuell noch angepasst werden
+
+---
+
+## [1.4.0] — 03.09.2026 (STABLE - Production Release)
+
+### ✅ Stabiler Production Release
+- 🔧 Debug-Logs entfernt - Code ist sauber
+- 🔧 Alle Features funktionieren perfekt
+- ✨ **Speichern:** ✅ Funktioniert
+- ✨ **Bearbeiten:** ✅ Funktioniert
+- ✨ **Löschen:** ✅ Funktioniert
+- ✨ **GitHub Sync:** ✅ Funktioniert
+- 🎉 Einsatzbereit!
+
+---
+
 ## [1.3.0] — 03.09.2026 (MAJOR: ROOT CAUSE FOUND!)
 
 ### 🔴 KRITISCHER BUG BEHOBEN - Der Grund warum nichts gespeichert wurde!
