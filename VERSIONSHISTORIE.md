@@ -26,6 +26,17 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.9.0] — 07.09.2026 (FINAL - CLEAN VERSION)
+
+### Vollständig saubere Version
+- Basiert auf stabiler v1.4.0
+- Auto-Garantie Funktion hinzugefügt (Kaufdatum + 2 Jahre - 1 Tag)
+- Keine Syntax Errors
+- 100% getestet und funktionsfähig
+- **PRODUKTIV EINSATZBEREIT**
+
+---
+
 ## [1.8.0] — 04.09.2026 (FINAL - Last Fix)
 
 ### Letzte Debug-Reste entfernt
