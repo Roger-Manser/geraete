@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.6.0)">
+    <meta name="description" content="Geräteliste - Verwaltung von Haushaltsgeräten und Elektrowerkzeugen (v1.7.0)">
     <meta name="theme-color" content="#1B5E3F">
     <meta name="version" content="1.0.1">
-    <title>Geräteliste v1.6.0</title>
+    <title>Geräteliste v1.7.0</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-48.png">
     <style>
@@ -679,7 +679,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;" id="version-clickable">
                     <img src="icon-48.png" alt="Geräteliste Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;">
-                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.6.0)</span></h1>
+                    <h1 style="margin: 0;">Geräteliste <span style="font-size: 0.8rem; opacity: 0.8; text-decoration: underline;">(v1.7.0)</span></h1>
                 </div>
                 <button class="btn-secondary" id="btn-settings" style="padding: 0.5rem 0.75rem; font-size: 0.9rem;">⚙️ Einstellungen</button>
             </div>
@@ -857,7 +857,6 @@
                 <label>Claude API Key</label>
                 <input type="password" id="claude-api-key" placeholder="sk-...">
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
-                    <a href="https://console.anthropic.com/keys" style="color: var(--primary-light); text-decoration: none;">API Key erstellen</a>
                     (für Photo-Analyse erforderlich)
                 </p>
             </div>
@@ -917,7 +916,6 @@
                     <label>Claude API Key (Optional)</label>
                     <input type="password" id="settings-claude-key" placeholder="sk-...">
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0;">
-                        <a href="https://console.anthropic.com/keys" style="color: var(--primary-light); text-decoration: none;" target="_blank">Key erstellen ↗</a>
                         (Nur für Photo-Analyse erforderlich)
                     </p>
                 </div>
@@ -1119,7 +1117,7 @@
     </script>
     <script>
         // App Version
-        const APP_VERSION = '1.6.0';
+        const APP_VERSION = '1.7.0';
         const APP_BUILD_DATE = '30.08.2026';
 
         // App State
@@ -1609,7 +1607,6 @@
                     }
                     app.currentDevice.hauptbild = base64;
                     displayDeviceImage(base64);
-                    console.log(`📸 Gerätebild gespeichert (${sizeKB}KB, ${width}x${height}px)`);
                 };
                 img.onerror = () => {
                     showToast('❌ Bild konnte nicht geladen werden', 'error');
@@ -1874,7 +1871,6 @@
         // PDF Komprimierung - NUR bei Bedarf (> 5MB)
         async function handleFileSelect(e) {
             const files = e.target.files;
-            console.log(`📎 handleFileSelect aufgerufen mit ${files.length} Datei(en)`);
             
             if (!files.length) return;
 
@@ -1891,12 +1887,10 @@
             // Jede Datei verarbeiten
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                console.log(`📎 Verarbeite Datei ${i+1}/${files.length}: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`);
 
                 // Größe prüfen
                 if (file.size > MAX_SINGLE_FILE) {
                     showToast(`⚠️ ${file.name}: ${(file.size/1024/1024).toFixed(1)}MB ist zu gross (max 100MB)`, 'warning');
-                    console.warn(`❌ Datei zu gross: ${file.name}`);
                     continue;
                 }
 
@@ -1904,17 +1898,14 @@
                 const totalSize = app.currentDevice.dateien.reduce((sum, f) => sum + (f.size || 0), 0) + file.size;
                 if (totalSize > MAX_TOTAL) {
                     showToast(`⚠️ Zu viele/grosse Dateien. Max 500MB total.`, 'warning');
-                    console.warn('❌ Gesamtgröße überschritten');
                     continue;
                 }
 
                 // Zu GitHub hochladen (OHNE Komprimierung!)
                 const deviceId = app.currentDevice.id || `device-${Date.now()}`;
                 showToast(`⏳ Lade hoch: ${file.name}...`, 'info');
-                console.log(`📤 Starte Upload zu GitHub: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`);
 
                 const uploadResult = await uploadFileToGitHub(file, deviceId);
-                console.log(`Upload Result:`, uploadResult);
                 
                 if (uploadResult) {
                     // Nur Metadaten speichern
@@ -1929,12 +1920,9 @@
                     };
 
                     app.currentDevice.dateien.push(fileObj);
-                    console.log(`✅ Datei zu Device hinzugefügt: ${file.name}`);
                     renderFilesList(app.currentDevice.dateien);
                     showToast(`✅ ${file.name} hochgeladen! (${(file.size/1024/1024).toFixed(1)}MB)`, 'success');
-                    console.log(`📎 Datei zu GitHub: ${uploadResult.githubPath}`);
                 } else {
-                    console.error(`❌ Upload fehlgeschlagen für: ${file.name}`);
                 }
             }
         }
@@ -2015,13 +2003,11 @@
                     throw new Error(error.message || 'Upload fehlgeschlagen');
                 }
 
-                console.log(`✅ Datei zu GitHub hochgeladen: ${filePath}`);
                 return {
                     githubPath: filePath,
                     synced: true
                 };
             } catch (err) {
-                console.error('GitHub Upload fehler:', err);
                 showToast(`❌ Datei-Upload fehler: ${err.message}`, 'error');
                 return null;
             }
@@ -2058,12 +2044,10 @@
                 });
 
                 if (deleteResponse.ok) {
-                    console.log(`✅ Datei von GitHub gelöscht: ${filePath}`);
                     return true;
                 }
                 return false;
             } catch (err) {
-                console.error('GitHub Delete fehler:', err);
                 return false;
             }
         }
@@ -2079,7 +2063,6 @@
             const confirmed = confirm(`🗑️ Datei wirklich löschen?\n\n"${file.name}"\n\nDiese Aktion kann nicht rückgängig gemacht werden!`);
             
             if (!confirmed) {
-                console.log(`❌ Datei-Löschung abgebrochen: ${file.name}`);
                 return;
             }
             
@@ -2087,7 +2070,6 @@
             if (file.githubPath && file.synced) {
                 deleteFileFromGitHub(file.githubPath).then(success => {
                     if (success) {
-                        console.log(`🗑️ Datei von GitHub gelöscht: ${file.name}`);
                         showToast(`✅ ${file.name} gelöscht!`, 'success');
                     } else {
                         showToast(`⚠️ Datei von GitHub konnte nicht gelöscht werden`, 'warning');
@@ -2106,9 +2088,6 @@
                 // Konstruiere GitHub Raw Content URL
                 const rawUrl = `https://raw.githubusercontent.com/${app.githubConfig.user}/${app.githubConfig.repo}/main/${file.githubPath}`;
                 
-                console.log(`🔗 Download URL: ${rawUrl}`);
-                console.log(`📄 Dateiname: ${file.name}`);
-                console.log(`📁 githubPath: ${file.githubPath}`);
                 
                 // Download auslösen
                 const a = document.createElement('a');
@@ -2118,10 +2097,8 @@
                 a.click();
                 document.body.removeChild(a);
                 
-                console.log(`⬇️ Datei heruntergeladen: ${file.name}`);
                 showToast(`⬇️ ${file.name} wird heruntergeladen...`, 'info');
             } else {
-                console.error(`❌ Datei nicht gefunden oder kein githubPath: fileId=${fileId}`);
             }
         }
 
@@ -2141,7 +2118,6 @@
             if (searchValue.includes('roger-manser') || searchValue === 'roger-manser') {
                 e.target.value = '';
                 searchValue = '';
-                console.warn('⛔ "roger-manser" blockiert!');
             }
             
             app.searchQuery = searchValue;
@@ -2172,7 +2148,6 @@
                         d.seriennummer?.toLowerCase().includes(query));
             });
 
-            console.log('🔍 Nach Filter: ' + filtered.length + ' Geräte');
 
             const grid = document.getElementById('devices-grid');
             const empty = document.getElementById('empty-state');
@@ -2206,7 +2181,6 @@
                 `;
             }).join('');
             
-            console.log('✅ ' + filtered.length + ' Geräte gerendert');
         }
 
         function getWarrantyStatus(garantiebis) {
@@ -2258,11 +2232,9 @@
 
             output.textContent = status;
             output.style.display = 'block';
-            console.log(status);
         }
 
         async function debugForceSyncWithGitHub() {
-            console.log('Geräte vor Sync:', app.devices);
             
             const output = document.getElementById('debug-output');
             output.textContent = '⏳ Syncing...';
@@ -2312,7 +2284,6 @@ SHA: ${data.sha}`;
 
             try {
                 const apiUrl = `https://api.github.com/repos/${app.githubConfig.user}/${app.githubConfig.repo}/contents/data/geraete.json`;
-                console.log('🔗 API URL:', apiUrl);
                 
                 // Schritt 1: SHA der aktuellen Datei auslesen
                 let sha = null;
@@ -2327,13 +2298,10 @@ SHA: ${data.sha}`;
                     if (getResponse.ok) {
                         const fileData = await getResponse.json();
                         sha = fileData.sha;
-                        console.log('✅ SHA gefunden:', sha);
                     } else if (getResponse.status !== 404) {
-                        console.warn('⚠️ SHA-Fehler:', getResponse.status, getResponse.statusText);
                     } else {
                     }
                 } catch (err) {
-                    console.warn('⚠️ SHA-Error (nicht kritisch):', err.message);
                 }
 
             // Schritt 2: Neue Daten vorbereiten
@@ -2357,7 +2325,6 @@ SHA: ${data.sha}`;
                 } else {
                     const errorData = await uploadResponse.json();
                     const errorMsg = errorData.message || uploadResponse.statusText;
-                    console.error('❌ GitHub SYNC FEHLER:', {
                         status: uploadResponse.status,
                         message: errorMsg,
                         details: errorData
@@ -2365,7 +2332,6 @@ SHA: ${data.sha}`;
                     showToast(`❌ GitHub Fehler: ${errorMsg}`, 'error');
                 }
             } catch (err) {
-                console.error('💥 SYNC EXCEPTION:', err);
                 showToast('💥 Sync-Fehler: ' + err.message, 'error');
             } finally {
                 hideLoading();
@@ -2388,7 +2354,6 @@ SHA: ${data.sha}`;
                     // EINFACHE, bewährte UTF-8 Dekodierung
                     let decodedString = decodeURIComponent(escape(atob(data.content)));
                     
-                    console.log(decodedString.substring(0, 200));
                     
                     // 🔧 REPARATUR AM RAW STRING - VOR JSON.parse()!
                     // Das ist sicherer als einzelne Feld-Reparaturen!
@@ -2421,7 +2386,6 @@ SHA: ${data.sha}`;
                         .replace(/Â¤/g, 'ä')
                         .replace(/Â¶/g, 'ö');
                     
-                    console.log(decodedString.substring(0, 200));
                     
                     
                     let content;
@@ -2429,19 +2393,17 @@ SHA: ${data.sha}`;
                         content = JSON.parse(decodedString);
                         
                     } catch (parseErr) {
-                        console.error('💥 JSON PARSE ERROR:', parseErr.message);
-                        console.error('String bei Fehler:', decodedString.substring(0, 500));
                         throw parseErr;
                     }
                     
                     
                     app.devices = content.geraete || [];
-                    
-                    // 🔍 DEBUG: Zeige das Gerät mit dem Hersteller "Bose" 
-                        
-                        console.log('📥 GELADEN - Alle Hersteller:', app.devices.map(d => d.hersteller));
-                    }
-        }
+                    renderDevices();
+                }
+            } catch (err) {
+                app.devices = [];
+                renderDevices();
+            }
 
         // Utilities
         function showLoading(text = 'Laden...') {
@@ -2486,11 +2448,9 @@ SHA: ${data.sha}`;
 
                 // Vergleiche Versionen
                 if (remoteVersion !== localVersion) {
-                    console.log(`Update verfügbar: ${localVersion} → ${remoteVersion}`);
                     showUpdateNotification(remoteVersion);
                 }
             } catch (err) {
-                console.log('Update-Check fehlgeschlagen:', err.message);
             }
         }
 
