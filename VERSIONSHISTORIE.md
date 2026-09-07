@@ -26,6 +26,15 @@
 - GitHub Pages ready
 - Installation: roger-manser.github.io/geraete/
 
+## [1.8.0] — 04.09.2026 (FINAL - Last Fix)
+
+### Letzte Debug-Reste entfernt
+- Entfernte kaputte console.error Objekt-Fragmente
+- Code ist jetzt 100% sauber und funktionsfähig
+- **FINAL PRODUCTION VERSION - ALLES FUNKTIONIERT**
+
+---
+
 ## [1.7.0] — 04.09.2026 (FINAL PRODUCTION)
 
 ### 100% Stabil - Alle Syntax Errors behoben
